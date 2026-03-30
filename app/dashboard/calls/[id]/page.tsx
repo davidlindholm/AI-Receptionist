@@ -12,12 +12,12 @@ function formatDateTime(date: Date): string {
   }).format(new Date(date));
 }
 
-export default function CallDetailPage({
+export default async function CallDetailPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const lead = getLeadById(params.id);
+  const lead = await getLeadById(params.id);
   if (!lead) notFound();
 
   return (

@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
 
   switch (eventType) {
     case "call_started": {
-      startCall(callControlId, callerPhone ?? "unknown");
+      await startCall(callControlId, callerPhone ?? "unknown");
       // Answer the call, play greeting, start recording + transcription
       try {
         await provider.answerCall(callControlId);
@@ -58,36 +58,30 @@ export async function POST(req: NextRequest) {
 
     case "transcript": {
       if (transcript) {
-        updateActiveCall(callControlId, { transcript });
+        await updateActiveCall(callControlId, { transcript });
       }
       break;
     }
 
     case "recording_saved": {
       if (recordingUrl) {
-        updateActiveCall(callControlId, { recording_url: recordingUrl });
+        await updateActiveCall(callControlId, { recording_url: recordingUrl });
       }
       break;
     }
 
     case "call_ended": {
-      // Pull the latest stored transcript (transcription events may have arrived earlier)
-      const g = global as typeof globalThis & {
-        __active_calls?: Map<string, { transcript?: string; recording_url?: string }>;
-      };
-      const active = g.__active_calls?.get(callControlId);
-      const finalTranscript = active?.transcript ?? transcript ?? "";
+      const extracted = extractLeadFromTranscript(transcript ?? "");
 
-      const extracted = extractLeadFromTranscript(finalTranscript);
-
-      // Try to finalise an in-progress call first (Call Control flow)
-      let lead = finaliseCall(callControlId, {
+      // Try to finalise an in-progress call first (Call Control flow).
+      // finaliseCall reads transcript + recording_url from KV (stored by earlier events).
+      let lead = await finaliseCall(callControlId, {
         caller_name: extracted.caller_name,
         service_type: extracted.service_type,
         urgency: extracted.urgency,
         summary: extracted.summary,
-        transcript: finalTranscript || null,
-        recording_url: active?.recording_url ?? recordingUrl ?? null,
+        transcript: transcript || null,
+        recording_url: recordingUrl ?? null,
       });
 
       // AI Assistant flow: no prior call_started, so create the lead directly
@@ -100,13 +94,13 @@ export async function POST(req: NextRequest) {
           service_type: extracted.service_type,
           urgency: extracted.urgency,
           summary: extracted.summary,
-          transcript: finalTranscript || null,
+          transcript: transcript || null,
           recording_url: recordingUrl ?? null,
           status: "completed",
           created_at: new Date(),
           completed_at: new Date(),
         };
-        addLead(newLead);
+        await addLead(newLead);
         lead = newLead;
       }
 

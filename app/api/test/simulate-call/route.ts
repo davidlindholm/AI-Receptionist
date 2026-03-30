@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     completed_at: new Date(),
   };
 
-  addLead(lead);
+  await addLead(lead);
 
   const notifType = lead.urgency === "urgent" ? "urgent_call" : "new_lead";
   await sendNotification(notifType, lead);

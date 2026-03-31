@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@vercel/kv": "^3.0.0",
+    "@supabase/supabase-js": "^2.101.0",
     "next": "13.5.7",
     "react": "^18",
     "react-dom": "^18",

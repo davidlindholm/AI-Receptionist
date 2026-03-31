@@ -1,9 +1,8 @@
 /**
- * Leads store backed by Vercel KV (Upstash Redis).
- * All functions are async — swap this file for a Supabase adapter later
- * without touching any other file.
+ * Leads store backed by Supabase (Postgres).
+ * All functions are async — same public interface as the former Vercel KV adapter.
  */
-import { kv } from "@vercel/kv";
+import { createClient } from "@supabase/supabase-js";
 
 export type Urgency = "urgent" | "normal";
 export type CallStatus = "in_progress" | "completed" | "missed";
@@ -23,28 +22,28 @@ export interface Lead {
   completed_at: Date | null;
 }
 
-// Redis key helpers
-const LEADS_LIST = "leads";
-const leadKey = (id: string) => `lead:${id}`;
-const activeCallKey = (id: string) => `active_call:${id}`;
-
-/** Deserialise a stored lead (restores Date objects). */
-function parseLead(raw: unknown): Lead {
-  const l = typeof raw === "string" ? JSON.parse(raw) : (raw as Record<string, unknown>);
-  return {
-    ...l,
-    created_at: new Date(l.created_at as string),
-    completed_at: l.completed_at ? new Date(l.completed_at as string) : null,
-  } as Lead;
+function getClient() {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) throw new Error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
+  return createClient(url, key);
 }
 
-/** Serialise a lead for storage (Dates → ISO strings). */
-function serialiseLead(lead: Lead): string {
-  return JSON.stringify({
-    ...lead,
-    created_at: lead.created_at.toISOString(),
-    completed_at: lead.completed_at?.toISOString() ?? null,
-  });
+function rowToLead(row: Record<string, unknown>): Lead {
+  return {
+    id: row.id as string,
+    call_control_id: row.call_control_id as string,
+    caller_phone: row.caller_phone as string,
+    caller_name: (row.caller_name as string | null) ?? null,
+    service_type: (row.service_type as string | null) ?? null,
+    urgency: (row.urgency as Urgency) ?? "normal",
+    summary: (row.summary as string | null) ?? null,
+    transcript: (row.transcript as string | null) ?? null,
+    recording_url: (row.recording_url as string | null) ?? null,
+    status: (row.status as CallStatus) ?? "completed",
+    created_at: new Date(row.created_at as string),
+    completed_at: row.completed_at ? new Date(row.completed_at as string) : null,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -53,15 +52,25 @@ function serialiseLead(lead: Lead): string {
 
 /** All completed leads, newest first. */
 export async function getLeads(): Promise<Lead[]> {
-  const raw = await kv.lrange(LEADS_LIST, 0, -1);
-  return (raw as unknown[]).map(parseLead);
+  const sb = getClient();
+  const { data, error } = await sb
+    .from("leads")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return (data ?? []).map(rowToLead);
 }
 
 /** Single lead by id. */
 export async function getLeadById(id: string): Promise<Lead | undefined> {
-  const raw = await kv.get(leadKey(id));
-  if (!raw) return undefined;
-  return parseLead(raw);
+  const sb = getClient();
+  const { data, error } = await sb
+    .from("leads")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw error;
+  return data ? rowToLead(data) : undefined;
 }
 
 /** Start tracking an in-progress call. */
@@ -69,15 +78,15 @@ export async function startCall(
   callControlId: string,
   callerPhone: string
 ): Promise<void> {
-  const data = {
-    id: crypto.randomUUID(),
+  const sb = getClient();
+  const { error } = await sb.from("active_calls").upsert({
     call_control_id: callControlId,
+    id: crypto.randomUUID(),
     caller_phone: callerPhone,
     status: "in_progress",
     created_at: new Date().toISOString(),
-  };
-  // Expire after 2 hours in case call_ended never fires
-  await kv.set(activeCallKey(callControlId), JSON.stringify(data), { ex: 7200 });
+  });
+  if (error) throw error;
 }
 
 /** Update fields on an in-progress call (transcript, recording_url, etc.). */
@@ -85,71 +94,83 @@ export async function updateActiveCall(
   callControlId: string,
   fields: Partial<Lead>
 ): Promise<void> {
-  const raw = await kv.get(activeCallKey(callControlId));
-  const existing = raw
-    ? (typeof raw === "string" ? JSON.parse(raw) : raw)
-    : {};
-  await kv.set(
-    activeCallKey(callControlId),
-    JSON.stringify({ ...existing, ...fields }),
-    { ex: 7200 }
-  );
+  const sb = getClient();
+  const update: Record<string, unknown> = { ...fields };
+  // Remove undefined values so we don't overwrite existing data with null
+  for (const k of Object.keys(update)) {
+    if (update[k] === undefined) delete update[k];
+  }
+  const { error } = await sb
+    .from("active_calls")
+    .update(update)
+    .eq("call_control_id", callControlId);
+  if (error) throw error;
 }
 
-/** Finalise a call: merge enriched fields, persist to leads list. */
+/** Finalise a call: merge enriched fields, persist to leads table. */
 export async function finaliseCall(
   callControlId: string,
   enriched: Partial<Lead>
 ): Promise<Lead | null> {
-  const raw = await kv.get(activeCallKey(callControlId));
-  if (!raw) return null;
+  const sb = getClient();
 
-  const active =
-    typeof raw === "string" ? JSON.parse(raw) : (raw as Record<string, unknown>);
+  const { data: active, error: fetchErr } = await sb
+    .from("active_calls")
+    .select("*")
+    .eq("call_control_id", callControlId)
+    .maybeSingle();
+  if (fetchErr) throw fetchErr;
+  if (!active) return null;
 
   const lead: Lead = {
     id: (active.id as string) ?? crypto.randomUUID(),
     call_control_id: callControlId,
     caller_phone: (active.caller_phone as string) ?? "unknown",
     caller_name: enriched.caller_name ?? (active.caller_name as string | null) ?? null,
-    service_type:
-      enriched.service_type ?? (active.service_type as string | null) ?? null,
+    service_type: enriched.service_type ?? (active.service_type as string | null) ?? null,
     urgency: enriched.urgency ?? (active.urgency as Urgency) ?? "normal",
     summary: enriched.summary ?? (active.summary as string | null) ?? null,
-    transcript:
-      enriched.transcript ?? (active.transcript as string | null) ?? null,
-    recording_url:
-      enriched.recording_url ??
-      (active.recording_url as string | null) ??
-      null,
+    transcript: enriched.transcript ?? (active.transcript as string | null) ?? null,
+    recording_url: enriched.recording_url ?? (active.recording_url as string | null) ?? null,
     status: "completed",
-    created_at: active.created_at
-      ? new Date(active.created_at as string)
-      : new Date(),
+    created_at: active.created_at ? new Date(active.created_at as string) : new Date(),
     completed_at: new Date(),
   };
 
-  const serialised = serialiseLead(lead);
+  const { error: insertErr } = await sb.from("leads").insert({
+    ...lead,
+    created_at: lead.created_at.toISOString(),
+    completed_at: lead.completed_at!.toISOString(),
+  });
+  if (insertErr) throw insertErr;
 
-  await Promise.all([
-    kv.lpush(LEADS_LIST, serialised),
-    kv.set(leadKey(lead.id), serialised),
-    kv.del(activeCallKey(callControlId)),
-  ]);
+  const { error: delErr } = await sb
+    .from("active_calls")
+    .delete()
+    .eq("call_control_id", callControlId);
+  if (delErr) throw delErr;
 
   return lead;
 }
 
 /** Add a lead directly (used by the simulate endpoint in dev). */
 export async function addLead(lead: Lead): Promise<void> {
-  const serialised = serialiseLead(lead);
-  await Promise.all([
-    kv.lpush(LEADS_LIST, serialised),
-    kv.set(leadKey(lead.id), serialised),
-  ]);
+  const sb = getClient();
+  const { error } = await sb.from("leads").insert({
+    ...lead,
+    created_at: lead.created_at.toISOString(),
+    completed_at: lead.completed_at?.toISOString() ?? null,
+  });
+  if (error) throw error;
 }
 
 /** Clear all leads and active calls (used by the clear endpoint). */
 export async function clearLeads(): Promise<void> {
-  await kv.del(LEADS_LIST);
+  const sb = getClient();
+  const [r1, r2] = await Promise.all([
+    sb.from("leads").delete().neq("id", "00000000-0000-0000-0000-000000000000"),
+    sb.from("active_calls").delete().neq("call_control_id", ""),
+  ]);
+  if (r1.error) throw r1.error;
+  if (r2.error) throw r2.error;
 }

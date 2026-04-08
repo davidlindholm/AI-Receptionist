@@ -179,7 +179,7 @@ export const telnyxProvider: VoiceProvider = {
 
     // 4. Enable transcription (Swedish)
     await telnyxCommand(callControlId, "transcription_start", {
-      language: "sv-SW",
+      language: "sv-SE",
       interim_results: false,
     });
   },

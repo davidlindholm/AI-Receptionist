@@ -17,7 +17,9 @@ declare global {
   }
 }
 
-export function TelnyxWidget() {
+const DEFAULT_AGENT_ID = "assistant-5364d76a-4c74-49d0-b17d-396ffd8b520f";
+
+export function TelnyxWidget({ agentId = DEFAULT_AGENT_ID }: { agentId?: string }) {
   return (
     <>
       <Script
@@ -25,7 +27,7 @@ export function TelnyxWidget() {
         strategy="afterInteractive"
       />
       <telnyx-ai-agent
-        agent-id="assistant-5364d76a-4c74-49d0-b17d-396ffd8b520f"
+        agent-id={agentId}
         environment="production"
       />
     </>

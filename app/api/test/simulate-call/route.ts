@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
     caller_phone: overrides.caller_phone ?? "+46701234567",
     caller_name: overrides.caller_name ?? extracted.caller_name,
     service_type: overrides.service_type ?? extracted.service_type,
+    company_slug: overrides.company_slug ?? null,
     urgency: overrides.urgency ?? extracted.urgency,
     summary: overrides.summary ?? extracted.summary,
     transcript,

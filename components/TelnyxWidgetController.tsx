@@ -22,59 +22,64 @@ declare global {
 
 export function TelnyxWidgetController({ agentId }: { agentId: string }) {
   useEffect(() => {
-    const el = document.querySelector("telnyx-ai-agent") as HTMLElement & {
-      open?: () => void;
-    };
-    if (!el) return;
+    let poll: ReturnType<typeof setInterval>;
 
-    // Hide the widget's native launcher button once the shadow DOM renders
-    const hideLauncher = () => {
-      const shadow = el.shadowRoot;
-      if (!shadow) return false;
-      const btn = shadow.querySelector("button");
-      if (!btn) return false;
-      btn.style.setProperty("display", "none", "important");
+    const setup = (): boolean => {
+      const el = document.querySelector("telnyx-ai-agent") as HTMLElement & {
+        open?: () => void;
+      };
+      // Wait until custom element has upgraded and shadow DOM is attached
+      if (!el || !el.shadowRoot) return false;
+
+      // React 18 doesn't always serialize hyphenated props to HTML attributes
+      // for custom elements. Force the attribute so the widget script reads
+      // the right agent on every render.
+      if (el.getAttribute("agent-id") !== agentId) {
+        el.setAttribute("agent-id", agentId);
+      }
+
+      window.__openTelnyxWidget = () => {
+        // Unlock browser audio context immediately on user gesture —
+        // this prevents the first 200-500ms of speech from being cut off
+        try {
+          const ctx = new AudioContext();
+          ctx.resume().catch(() => {});
+        } catch (_) {}
+
+        if (typeof el.open === "function") {
+          el.open();
+          return;
+        }
+        // Find the launcher button and click it directly —
+        // no display manipulation, which could confuse the widget
+        const btn = el.shadowRoot?.querySelector<HTMLButtonElement>("button");
+        btn?.click();
+      };
+
       return true;
     };
 
-    if (!hideLauncher()) {
-      // Shadow DOM not ready yet — observe until it is
-      const observer = new MutationObserver(() => {
-        if (hideLauncher()) observer.disconnect();
-      });
-      observer.observe(el, { childList: true, subtree: true });
+    // Poll every 100ms until the shadow DOM is ready.
+    // MutationObserver can't observe shadow DOM attachment reliably.
+    if (!setup()) {
+      poll = setInterval(() => {
+        if (setup()) clearInterval(poll);
+      }, 100);
     }
 
-    // Global trigger function — tries open(), shadow click, then element click
-    window.__openTelnyxWidget = () => {
-      if (typeof el.open === "function") {
-        el.open();
-        return;
-      }
-      const shadow = el.shadowRoot;
-      if (shadow) {
-        const btn = shadow.querySelector("button");
-        if (btn) {
-          btn.style.removeProperty("display");
-          btn.click();
-          btn.style.setProperty("display", "none", "important");
-          return;
-        }
-      }
-      el.click();
-    };
-
-    // Delegate clicks from any element with data-open-widget
+    // Global click delegation — any element with data-open-widget triggers the widget
     const handleClick = (e: MouseEvent) => {
-      const target = (e.target as Element).closest("[data-open-widget]");
-      if (target) {
-        e.preventDefault();
-        window.__openTelnyxWidget?.();
-      }
+      if (!(e.target as Element).closest("[data-open-widget]")) return;
+      e.preventDefault();
+      window.__openTelnyxWidget?.();
     };
     document.addEventListener("click", handleClick);
-    return () => document.removeEventListener("click", handleClick);
-  }, []);
+
+    return () => {
+      clearInterval(poll);
+      document.removeEventListener("click", handleClick);
+    };
+  }, [agentId]);
 
   return (
     <>
@@ -82,7 +87,17 @@ export function TelnyxWidgetController({ agentId }: { agentId: string }) {
         src="https://unpkg.com/@telnyx/ai-agent-widget@next"
         strategy="afterInteractive"
       />
-      <telnyx-ai-agent agent-id={agentId} environment="production" />
+      {/*
+        Widget is positioned off-screen — fully rendered and initialized,
+        but invisible. We never touch the button's display property, so
+        clicks on it are always processed correctly by the browser.
+      */}
+      <div
+        aria-hidden="true"
+        style={{ position: "fixed", left: "-9999px", bottom: 0, zIndex: -1 }}
+      >
+        <telnyx-ai-agent agent-id={agentId} environment="production" />
+      </div>
     </>
   );
 }

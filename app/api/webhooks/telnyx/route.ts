@@ -9,6 +9,7 @@ import {
 import type { Lead } from "@/lib/leads-store";
 import { extractLeadFromTranscript } from "@/lib/lead-extraction";
 import { sendNotification } from "@/lib/notifications";
+import { getCompanyByAssistantId } from "@/lib/companies";
 
 export async function POST(req: NextRequest) {
   // Read raw body first (needed for signature verification)
@@ -19,6 +20,11 @@ export async function POST(req: NextRequest) {
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
+
+  // First slug source: ?slug= query param. Per-assistant Call Control
+  // webhook URLs are configured with this. The shared Insight Group webhook
+  // is NOT — those leads are tagged via assistant_id reverse lookup below.
+  const slugFromQuery = req.nextUrl.searchParams.get("slug");
 
   const provider = getVoiceProvider("telnyx");
 
@@ -40,13 +46,29 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Bad payload" }, { status: 400 });
   }
 
-  const { callControlId, eventType, callerPhone, transcript, recordingUrl } = event;
+  const { callControlId, eventType, callerPhone, transcript, recordingUrl, assistantId } =
+    event;
 
-  console.log(`[webhook/telnyx] ${eventType} — ${callControlId}`);
+  // Resolve the company slug for this call. Order:
+  //   1. ?slug= query param (per-assistant Call Control webhook URL)
+  //   2. assistant_id reverse-lookup against the COMPANIES registry
+  //      (works for the shared Insight Group webhook)
+  //   3. null — lead falls through to global dashboard only
+  const slug =
+    slugFromQuery ?? getCompanyByAssistantId(assistantId)?.slug ?? null;
+  if (!slug) {
+    console.warn(
+      `[webhook/telnyx] Could not resolve company slug ` +
+        `(query=${slugFromQuery ?? "null"}, assistant_id=${assistantId ?? "null"}) ` +
+        `— lead will be untagged`
+    );
+  }
+
+  console.log(`[webhook/telnyx] ${eventType} — ${callControlId} — slug=${slug ?? "null"}`);
 
   switch (eventType) {
     case "call_started": {
-      await startCall(callControlId, callerPhone ?? "unknown");
+      await startCall(callControlId, callerPhone ?? "unknown", slug);
       // Answer the call, play greeting, start recording + transcription
       try {
         await provider.answerCall(callControlId);
@@ -78,6 +100,7 @@ export async function POST(req: NextRequest) {
       let lead = await finaliseCall(callControlId, {
         caller_name: extracted.caller_name,
         service_type: extracted.service_type,
+        company_slug: slug,
         urgency: extracted.urgency,
         summary: extracted.summary,
         transcript: transcript || null,
@@ -92,6 +115,7 @@ export async function POST(req: NextRequest) {
           caller_phone: callerPhone ?? "unknown",
           caller_name: extracted.caller_name,
           service_type: extracted.service_type,
+          company_slug: slug,
           urgency: extracted.urgency,
           summary: extracted.summary,
           transcript: transcript || null,

@@ -22,6 +22,8 @@ export interface NormalizedCallEvent {
   transcript?: string;
   /** URL to the call recording. */
   recordingUrl?: string;
+  /** Provider-side assistant id (used to map the call back to a company). */
+  assistantId?: string;
   /** Original provider payload, kept for debugging/logging. */
   rawPayload: unknown;
 }

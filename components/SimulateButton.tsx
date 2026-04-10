@@ -3,14 +3,23 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export function SimulateButton() {
+interface SimulateButtonProps {
+  /** When set, the simulated lead is tagged with this company slug. */
+  companySlug?: string;
+}
+
+export function SimulateButton({ companySlug }: SimulateButtonProps = {}) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   async function handleSimulate() {
     setLoading(true);
     try {
-      await fetch("/api/test/simulate-call", { method: "POST" });
+      await fetch("/api/test/simulate-call", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(companySlug ? { company_slug: companySlug } : {}),
+      });
       router.refresh();
     } finally {
       setLoading(false);

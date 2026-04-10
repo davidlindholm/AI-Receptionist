@@ -13,6 +13,7 @@ export interface Lead {
   caller_phone: string;
   caller_name: string | null;
   service_type: string | null;
+  company_slug: string | null;
   urgency: Urgency;
   summary: string | null;
   transcript: string | null;
@@ -36,6 +37,7 @@ function rowToLead(row: Record<string, unknown>): Lead {
     caller_phone: row.caller_phone as string,
     caller_name: (row.caller_name as string | null) ?? null,
     service_type: (row.service_type as string | null) ?? null,
+    company_slug: (row.company_slug as string | null) ?? null,
     urgency: (row.urgency as Urgency) ?? "normal",
     summary: (row.summary as string | null) ?? null,
     transcript: (row.transcript as string | null) ?? null,
@@ -61,6 +63,18 @@ export async function getLeads(): Promise<Lead[]> {
   return (data ?? []).map(rowToLead);
 }
 
+/** All leads belonging to a single company, newest first. */
+export async function getLeadsByCompanySlug(companySlug: string): Promise<Lead[]> {
+  const sb = getClient();
+  const { data, error } = await sb
+    .from("leads")
+    .select("*")
+    .eq("company_slug", companySlug)
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return (data ?? []).map(rowToLead);
+}
+
 /** Single lead by id. */
 export async function getLeadById(id: string): Promise<Lead | undefined> {
   const sb = getClient();
@@ -76,13 +90,15 @@ export async function getLeadById(id: string): Promise<Lead | undefined> {
 /** Start tracking an in-progress call. */
 export async function startCall(
   callControlId: string,
-  callerPhone: string
+  callerPhone: string,
+  companySlug: string | null
 ): Promise<void> {
   const sb = getClient();
   const { error } = await sb.from("active_calls").upsert({
     call_control_id: callControlId,
     id: crypto.randomUUID(),
     caller_phone: callerPhone,
+    company_slug: companySlug,
     status: "in_progress",
     created_at: new Date().toISOString(),
   });
@@ -128,6 +144,8 @@ export async function finaliseCall(
     caller_phone: (active.caller_phone as string) ?? "unknown",
     caller_name: enriched.caller_name ?? (active.caller_name as string | null) ?? null,
     service_type: enriched.service_type ?? (active.service_type as string | null) ?? null,
+    company_slug:
+      enriched.company_slug ?? (active.company_slug as string | null) ?? null,
     urgency: enriched.urgency ?? (active.urgency as Urgency) ?? "normal",
     summary: enriched.summary ?? (active.summary as string | null) ?? null,
     transcript: enriched.transcript ?? (active.transcript as string | null) ?? null,

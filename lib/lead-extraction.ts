@@ -33,6 +33,11 @@ const SERVICE_TYPE_MAP: [RegExp, string][] = [
   [/el\b|electrical|ström|power/i, "El"],
   [/ventilation|fläkt|fan|hvac/i, "Ventilation"],
   [/tak|roof|fasad|facade/i, "Tak/Fasad"],
+  [/lås|låsöppning|låssmed|nyckel|locksmith/i, "Lås"],
+  [/fastighet|störning|spol-sug|slamsug|fastighetsjour|förvaltning/i, "Fastighetsservice"],
+  [/skadedjur|råtta|mus|kackerlacka|insekt|vägglöss|pest/i, "Skadedjur"],
+  [/bevakning|väktare|vaktnord|vaktmästeri/i, "Bevakning"],
+  [/sanering|fuktsanering|vattenskada|mögel|asbest/i, "Sanering"],
 ];
 
 // Simple name extraction: require actual capital first letter so connective words ("och", "att") are excluded.

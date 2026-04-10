@@ -111,11 +111,22 @@ export const telnyxProvider: VoiceProvider = {
       // results[0].result is the AI-generated insight/summary of the conversation
       const insightText = results?.[0]?.result ?? "";
 
+      // Telnyx may include the assistant id in metadata under one of several
+      // keys depending on the API version — try them all.
+      const assistantId =
+        (metadata?.assistant_id as string | undefined) ??
+        (metadata?.assistantId as string | undefined) ??
+        (payload?.assistant_id as string | undefined) ??
+        ((payload?.assistant as Record<string, unknown> | undefined)?.id as
+          | string
+          | undefined);
+
       return {
         callControlId,
         eventType: "call_ended",
         callerPhone,
         transcript: insightText,
+        assistantId,
         rawPayload: body,
       };
     }
@@ -140,6 +151,16 @@ export const telnyxProvider: VoiceProvider = {
     // call.initiated / call.answered
     if (payload?.from) {
       normalized.callerPhone = payload.from as string;
+    }
+
+    // Some Call Control payloads include the AI assistant id
+    const ccAssistantId =
+      (payload?.assistant_id as string | undefined) ??
+      ((payload?.assistant as Record<string, unknown> | undefined)?.id as
+        | string
+        | undefined);
+    if (ccAssistantId) {
+      normalized.assistantId = ccAssistantId;
     }
 
     // call.transcription

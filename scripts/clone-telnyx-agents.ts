@@ -162,12 +162,13 @@ async function updateAssistant(id: string, payload: Record<string, unknown>): Pr
 
 /**
  * Build the spoken greeting for one company, in the company's language.
+ * Always ends with a question so the caller knows to speak.
  */
 function buildGreeting(company: Company): string {
   if (company.language === "es") {
-    return `¡Hola! Has contactado a ${company.name}. En este momento no podemos atenderte personalmente, pero yo puedo ayudarte.`;
+    return `¡Hola! Has contactado a ${company.name}. En este momento no podemos atenderte personalmente, pero yo puedo ayudarte. ¿En qué puedo ayudarte?`;
   }
-  return `Hej! Du har kommit till ${company.name}. Vi är ute på jobb just nu, men jag kan hjälpa dig.`;
+  return `Hej! Du har kommit till ${company.name}. Vi är ute på jobb just nu, men jag kan hjälpa dig. Hur kan jag hjälpa dig?`;
 }
 
 // ---------------------------------------------------------------------------
@@ -217,6 +218,15 @@ function buildCreatePayload(
   payload.greeting = buildGreeting(company);
   payload.webhook_url = `${WEBHOOK_BASE_URL}/api/webhooks/telnyx?slug=${company.slug}`;
 
+  // Always add hangup tool so the bot can end calls after farewell
+  const hangupDesc =
+    company.language === "es"
+      ? "Utilizar cuando la conversación haya terminado y sea apropiado colgar la llamada."
+      : "To be used whenever the conversation has ended and it would be appropriate to hangup the call.";
+  payload.tools = [
+    { type: "hangup", hangup: { description: hangupDesc } },
+  ];
+
   // Override language settings for non-Swedish companies
   if (company.language === "es") {
     if (payload.voice_settings && typeof payload.voice_settings === "object") {
@@ -225,6 +235,7 @@ function buildCreatePayload(
         // Pedro - Formal Speaker (es-MX, Male)
         voice: "Telnyx.Ultra.15d0c2e2-8d29-44c3-be23-d585d5f154a1",
         language_boost: "Spanish",
+        language: "es-MX",
       };
     }
     if (payload.transcription && typeof payload.transcription === "object") {

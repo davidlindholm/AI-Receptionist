@@ -117,6 +117,7 @@ const eljardinConfig: BusinessConfig = {
   },
   slug: "eljardin",
   agentId: "assistant-86028a93-29e4-4dc7-9327-7569fd198db6",
+  language: "es",
 };
 
 export default function DemoElJardinPage() {

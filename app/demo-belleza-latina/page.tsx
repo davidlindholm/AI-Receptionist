@@ -117,6 +117,7 @@ const bellezaLatinaConfig: BusinessConfig = {
   },
   slug: "belleza-latina",
   agentId: "assistant-3e082d5d-4922-40dd-9203-046fa086a781",
+  language: "es",
 };
 
 export default function DemoBellezaLatinaPage() {

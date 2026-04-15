@@ -1,6 +1,7 @@
 "use client";
 
 import { TelnyxWidgetController } from "@/components/TelnyxWidgetController";
+import { t, type Lang } from "@/lib/i18n";
 import Link from "next/link";
 import { Poppins } from "next/font/google";
 
@@ -71,6 +72,7 @@ export interface BusinessConfig {
   };
   slug: string;     // Used to build the per-company dashboard link: /dashboard/{slug}
   agentId: string;
+  language?: Lang;  // UI language (default: "sv")
 }
 
 // ─── Icons ────────────────────────────────────────────────────────────────────
@@ -132,7 +134,7 @@ function IconRobot({ className }: { className?: string }) {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
-  const { brand, colors, hero, about, services, dialog, quoteForm, aiSection, footer, slug, agentId } = config;
+  const { brand, colors, hero, about, services, dialog, quoteForm, aiSection, footer, slug, agentId, language: lang = "sv" } = config;
 
   return (
     <div className={`${poppins.className} min-h-screen bg-white text-[#2b2e33]`}>
@@ -145,7 +147,7 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
             style={{ color: "inherit" }}
             onMouseEnter={(e) => (e.currentTarget.style.color = colors.primary)}
             onMouseLeave={(e) => (e.currentTarget.style.color = "inherit")}>
-            <IconMail className="w-3.5 h-3.5" /> Begär offert
+            <IconMail className="w-3.5 h-3.5" /> {t("requestQuote", lang)}
           </button>
           <button data-open-widget
             className="flex items-center gap-1.5 transition-colors font-semibold cursor-pointer"
@@ -180,16 +182,16 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
 
           {/* Links */}
           <div className="hidden md:flex items-center gap-8 text-[15px] font-semibold text-[#2b2e33]">
-            <a href="#" style={{ color: colors.primary }}>Hem</a>
+            <a href="#" style={{ color: colors.primary }}>{t("home", lang)}</a>
             <a href="#om-oss" className="transition-colors"
               onMouseEnter={(e) => (e.currentTarget.style.color = colors.primary)}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "")}>Om oss</a>
+              onMouseLeave={(e) => (e.currentTarget.style.color = "")}>{t("aboutUs", lang)}</a>
             <a href="#tjanster" className="transition-colors"
               onMouseEnter={(e) => (e.currentTarget.style.color = colors.primary)}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "")}>Tjänster</a>
+              onMouseLeave={(e) => (e.currentTarget.style.color = "")}>{t("services", lang)}</a>
             <a href="#kontakt" className="transition-colors"
               onMouseEnter={(e) => (e.currentTarget.style.color = colors.primary)}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "")}>Kontakt</a>
+              onMouseLeave={(e) => (e.currentTarget.style.color = "")}>{t("contact", lang)}</a>
           </div>
 
           {/* CTA */}
@@ -198,7 +200,7 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
             style={{ backgroundColor: colors.accent }}
             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = colors.accentHover)}
             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = colors.accent)}>
-            Begär offert
+            {t("requestQuote", lang)}
           </button>
         </div>
       </nav>
@@ -275,7 +277,7 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
                   <span className="inline-flex items-center gap-1.5 text-[14px] font-semibold
                                    group-hover:gap-2.5 transition-all"
                     style={{ color: colors.primary }}>
-                    Läs mer <IconArrow className="w-3.5 h-3.5" />
+                    {t("readMore", lang)} <IconArrow className="w-3.5 h-3.5" />
                   </span>
                 </div>
               </div>
@@ -309,7 +311,7 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
                 style={{ backgroundColor: colors.accent }}
                 onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = colors.accentHover)}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = colors.accent)}>
-                Begär offert
+                {t("requestQuote", lang)}
               </button>
             </div>
             <div>
@@ -342,7 +344,7 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
       {/* ── Quote form ─────────────────────────────────────────────────────── */}
       <section id="offert" className="bg-white py-16">
         <div className="mx-auto max-w-5xl px-6">
-          <h2 className="text-3xl font-bold text-[#2b2e33] mb-2">Begär offert</h2>
+          <h2 className="text-3xl font-bold text-[#2b2e33] mb-2">{t("requestQuote", lang)}</h2>
           <p className="text-[#2b2e33]/50 text-[17px] mb-10">
             {quoteForm.intro}
           </p>
@@ -353,41 +355,41 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
             {/* Form */}
             <form className="p-8 md:p-10 space-y-5">
               <div>
-                <label className="block text-[14px] font-semibold text-[#2b2e33] mb-1.5">Namn</label>
-                <input type="text" placeholder="Anna Lindgren"
+                <label className="block text-[14px] font-semibold text-[#2b2e33] mb-1.5">{t("formName", lang)}</label>
+                <input type="text" placeholder={t("formNamePh", lang)}
                   className="w-full rounded-[10px] border border-[#edf0f7] bg-[#f8fafc] px-4 py-3
                              text-[15px] placeholder:text-[#2b2e33]/30
                              focus:outline-none transition" />
               </div>
               <div>
                 <label className="block text-[14px] font-semibold text-[#2b2e33] mb-1.5">
-                  E-post <span className="text-red-400">*</span>
+                  {t("formEmail", lang)} <span className="text-red-400">*</span>
                 </label>
-                <input type="email" placeholder="anna@example.se"
+                <input type="email" placeholder={t("formEmailPh", lang)}
                   className="w-full rounded-[10px] border border-[#edf0f7] bg-[#f8fafc] px-4 py-3
                              text-[15px] placeholder:text-[#2b2e33]/30
                              focus:outline-none transition" />
               </div>
               <div>
-                <label className="block text-[14px] font-semibold text-[#2b2e33] mb-1.5">Telefon</label>
-                <input type="tel" placeholder="070-000 00 00"
+                <label className="block text-[14px] font-semibold text-[#2b2e33] mb-1.5">{t("formPhone", lang)}</label>
+                <input type="tel" placeholder={t("formPhonePh", lang)}
                   className="w-full rounded-[10px] border border-[#edf0f7] bg-[#f8fafc] px-4 py-3
                              text-[15px] placeholder:text-[#2b2e33]/30
                              focus:outline-none transition" />
               </div>
               <div>
                 <label className="block text-[14px] font-semibold text-[#2b2e33] mb-1.5">
-                  Jag vill ha hjälp med: <span className="text-red-400">*</span>
+                  {t("formServiceLabel", lang)} <span className="text-red-400">*</span>
                 </label>
                 <div className="relative">
                   <select defaultValue=""
                     className="w-full appearance-none rounded-[10px] border border-[#edf0f7] bg-[#f8fafc] px-4 py-3
                                text-[15px] focus:outline-none transition">
-                    <option value="" disabled>Välj tjänst...</option>
+                    <option value="" disabled>{t("formServicePh", lang)}</option>
                     {quoteForm.serviceOptions.map((opt) => (
                       <option key={opt}>{opt}</option>
                     ))}
-                    <option>Annat</option>
+                    <option>{t("formOther", lang)}</option>
                   </select>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                     strokeWidth={2} stroke="currentColor"
@@ -398,15 +400,15 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
               </div>
               <div>
                 <label className="block text-[14px] font-semibold text-[#2b2e33] mb-1.5">
-                  Meddelande <span className="text-red-400">*</span>
+                  {t("formMessage", lang)} <span className="text-red-400">*</span>
                 </label>
-                <textarea rows={4} placeholder="Beskriv kortfattat vad du behöver hjälp med..."
+                <textarea rows={4} placeholder={t("formMessagePh", lang)}
                   className="w-full rounded-[10px] border border-[#edf0f7] bg-[#f8fafc] px-4 py-3
                              text-[15px] placeholder:text-[#2b2e33]/30 resize-none
                              focus:outline-none transition" />
               </div>
               <p className="text-[13px] text-[#2b2e33]/50">
-                Samtycker till att mina personuppgifter behandlas enligt integritetspolicyn.
+                {t("formConsent", lang)}
               </p>
               {/* hCaptcha placeholder */}
               <div className="rounded-[10px] border border-[#edf0f7] bg-[#f8fafc] h-[78px] flex items-center
@@ -423,7 +425,7 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
                 style={{ backgroundColor: colors.accent }}
                 onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = colors.accentHover)}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = colors.accent)}>
-                Skicka offertförfrågan
+                {t("formSubmit", lang)}
               </button>
             </form>
 
@@ -431,13 +433,13 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
             <div className="p-8 md:p-10 text-white flex flex-col justify-between"
               style={{ backgroundColor: colors.accent }}>
               <div>
-                <h3 className="text-xl font-bold mb-2">Kontakta oss direkt</h3>
-                <p className="text-white/70 text-[15px] mb-8">Föredrar du att ringa eller maila?</p>
+                <h3 className="text-xl font-bold mb-2">{t("contactDirect", lang)}</h3>
+                <p className="text-white/70 text-[15px] mb-8">{t("contactDirectSub", lang)}</p>
                 <div className="space-y-5">
                   {[
-                    { Icon: IconPhone, label: "Telefon", value: brand.phone },
-                    { Icon: IconMail,  label: "E-post",  value: brand.email },
-                    { Icon: IconPin,   label: "Adress",  value: brand.addressShort ?? brand.address },
+                    { Icon: IconPhone, label: t("phone", lang), value: brand.phone },
+                    { Icon: IconMail,  label: t("email", lang),  value: brand.email },
+                    { Icon: IconPin,   label: t("address", lang),  value: brand.addressShort ?? brand.address },
                   ].map(({ Icon, label, value }) => (
                     <div key={label} className="flex items-start gap-3">
                       <Icon className="w-5 h-5 text-white/70 shrink-0 mt-0.5" />
@@ -476,7 +478,7 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
                   borderColor: `${colors.accent}80`,
                   color: "#ffffff",
                 }}>
-                <IconRobot className="w-4 h-4" /> AI-receptionist — alltid tillgänglig
+                <IconRobot className="w-4 h-4" /> {t("aiReceptionist", lang)}
               </span>
               <h2 className="text-3xl font-bold mb-4 leading-tight">{aiSection.title}</h2>
               <p className="text-white/80 text-[17px] leading-relaxed mb-7">
@@ -498,7 +500,7 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
               <div className="rounded-lg bg-white/10 border border-white/20 p-8 w-full max-w-sm backdrop-blur-sm text-center">
                 <p className="text-[13px] font-semibold mb-6 uppercase tracking-widest"
                   style={{ color: colors.accent }}>
-                  Livedemonstration
+                  {t("liveDemo", lang)}
                 </p>
                 <button data-open-widget
                   className="mx-auto flex items-center justify-center gap-3 rounded-full transition-colors w-20 h-20 cursor-pointer"
@@ -508,7 +510,7 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
                   <IconPhone className="w-8 h-8 text-white" />
                 </button>
                 <p className="mt-6 text-[13px] text-white/50 leading-relaxed">
-                  Tryck på knappen och tala direkt med AI-receptionisten
+                  {t("liveDemoSub", lang)}
                 </p>
               </div>
             </div>
@@ -519,13 +521,13 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
       {/* ── Contact ────────────────────────────────────────────────────────── */}
       <section id="kontakt" className="bg-[#edf0f7] py-16">
         <div className="mx-auto max-w-6xl px-6">
-          <h2 className="text-3xl font-bold text-[#2b2e33] mb-2">Kontakt</h2>
-          <p className="text-[#2b2e33]/50 text-[17px] mb-10">Vi finns här för dig</p>
+          <h2 className="text-3xl font-bold text-[#2b2e33] mb-2">{t("contactTitle", lang)}</h2>
+          <p className="text-[#2b2e33]/50 text-[17px] mb-10">{t("contactSub", lang)}</p>
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { Icon: IconPhone, title: "Telefon",  value: brand.phone, sub: "Dygnet runt vid akuta ärenden" },
-              { Icon: IconMail,  title: "E-post",   value: brand.email, sub: "Svar inom 1 arbetsdag" },
-              { Icon: IconPin,   title: "Adress",   value: brand.address, sub: "Öppet mån–fre 07–17" },
+              { Icon: IconPhone, title: t("phone", lang),  value: brand.phone, sub: t("phoneHours", lang) },
+              { Icon: IconMail,  title: t("email", lang),   value: brand.email, sub: t("emailResponse", lang) },
+              { Icon: IconPin,   title: t("address", lang),   value: brand.address, sub: t("officeHours", lang) },
             ].map(({ Icon, title, value, sub }) => (
               <div key={title}
                 className="rounded-lg bg-white border border-[#edf0f7] p-6 shadow-sm text-center
@@ -572,7 +574,7 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
           </div>
           <div className="md:text-right">
             <p className="text-[13px] font-semibold text-white/40 uppercase tracking-widest mb-4">
-              Certifieringar &amp; information
+              {t("certsTitle", lang)}
             </p>
             <div className="flex flex-wrap md:justify-end gap-3 mb-6">
               {footer.certs.map((cert) => (
@@ -583,9 +585,9 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
               ))}
             </div>
             <p className="text-white/30 text-[13px]">
-              © {footer.year} {brand.name}. Alla rättigheter förbehållna.
+              © {footer.year} {brand.name}. {t("allRights", lang)}
             </p>
-            <p className="text-white/20 text-[12px] mt-1">Cookies &amp; Integritetspolicy</p>
+            <p className="text-white/20 text-[12px] mt-1">{t("cookies", lang)}</p>
           </div>
         </div>
       </footer>

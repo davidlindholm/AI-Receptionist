@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getCompany, type Company } from "@/lib/companies";
 import { getLeadsByCompanySlug } from "@/lib/leads-store";
+import { t, type Lang } from "@/lib/i18n";
 import { CallCard } from "@/components/CallCard";
 import { SimulateButton } from "@/components/SimulateButton";
 import { ClearButton } from "@/components/ClearButton";
@@ -17,6 +18,7 @@ export default async function CompanyDashboardPage({ params }: Props) {
   if (!company) notFound();
 
   const leads = await getLeadsByCompanySlug(company.slug);
+  const lang: Lang = company.language ?? "sv";
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -38,8 +40,8 @@ export default async function CompanyDashboardPage({ params }: Props) {
               <h1 className="text-xl font-bold text-gray-900">{company.name}</h1>
               <p className="text-sm text-gray-500 mt-0.5">
                 {leads.length === 0
-                  ? "Inga samtal ännu"
-                  : `${leads.length} samtal — filtrerat på företag "${company.name}"`}
+                  ? t("noCalls", lang)
+                  : `${leads.length} ${t("callsFiltered", lang)} "${company.name}"`}
               </p>
             </div>
 
@@ -49,10 +51,10 @@ export default async function CompanyDashboardPage({ params }: Props) {
                 className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium
                            text-gray-600 hover:bg-gray-50 transition-colors"
               >
-                Visa demo →
+                {t("showDemo", lang)}
               </Link>
-              <ClearButton />
-              <SimulateButton companySlug={company.slug} />
+              <ClearButton lang={lang} />
+              <SimulateButton companySlug={company.slug} lang={lang} />
             </div>
           </div>
         </div>
@@ -73,17 +75,17 @@ export default async function CompanyDashboardPage({ params }: Props) {
             {company.description}
           </p>
           <p className="text-xs text-gray-500 mt-1">
-            Visar endast samtal från <strong>{company.name}</strong>.
-            Inkommande samtal taggas via webhook-URL:ens <code>?slug={company.slug}</code>.
+            {t("showingOnly", lang)} <strong>{company.name}</strong>.
+            {" "}{t("taggedVia", lang)} <code>?slug={company.slug}</code>.
           </p>
         </div>
 
         {leads.length === 0 ? (
-          <EmptyState company={company} />
+          <EmptyState company={company} lang={lang} />
         ) : (
           <div className="space-y-3">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400">
-              Senaste samtal
+              {t("latestCalls", lang)}
             </h2>
             {leads.map((lead) => (
               <CallCard key={lead.id} lead={lead} />
@@ -95,15 +97,17 @@ export default async function CompanyDashboardPage({ params }: Props) {
   );
 }
 
-function EmptyState({ company }: { company: Company }) {
+function EmptyState({ company, lang }: { company: Company; lang: Lang }) {
   return (
     <div className="flex flex-col items-center justify-center py-24 text-center">
       <div className="mb-4 text-5xl">📞</div>
-      <h2 className="text-lg font-semibold text-gray-700">Inga samtal ännu</h2>
+      <h2 className="text-lg font-semibold text-gray-700">{t("noCalls", lang)}</h2>
       <p className="mt-1 text-sm text-gray-500 max-w-sm">
-        Samtal som matchas mot{" "}
-        <span className="font-medium">&ldquo;{company.serviceType}&rdquo;</span> visas här.
-        Klicka på <span className="font-medium">&ldquo;Simulera samtal&rdquo;</span> för att testa flödet.
+        {t("emptyMatchPre", lang)}{" "}
+        <span className="font-medium">&ldquo;{company.serviceType}&rdquo;</span>{" "}
+        {t("emptyMatchPost", lang)}{" "}
+        <span className="font-medium">&ldquo;{t("simulateCall", lang)}&rdquo;</span>{" "}
+        {t("emptyMatchEnd", lang)}
       </p>
     </div>
   );

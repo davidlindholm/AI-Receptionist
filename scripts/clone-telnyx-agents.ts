@@ -222,6 +222,8 @@ function buildCreatePayload(
     if (payload.voice_settings && typeof payload.voice_settings === "object") {
       payload.voice_settings = {
         ...(payload.voice_settings as Record<string, unknown>),
+        // Pedro - Formal Speaker (es-MX, Male)
+        voice: "Telnyx.Ultra.15d0c2e2-8d29-44c3-be23-d585d5f154a1",
         language_boost: "Spanish",
       };
     }

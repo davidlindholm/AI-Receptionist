@@ -161,11 +161,12 @@ async function updateAssistant(id: string, payload: Record<string, unknown>): Pr
 // ---------------------------------------------------------------------------
 
 /**
- * Build the spoken greeting for one company. Mirrors the Nimoz original
- * ("Hej, Hej! Du har kommit till Nimoz Elinstallation. De är ute på jobb
- * just nu, men jag kan hjälpa dig.") with the company name swapped in.
+ * Build the spoken greeting for one company, in the company's language.
  */
 function buildGreeting(company: Company): string {
+  if (company.language === "es") {
+    return `¡Hola! Has contactado a ${company.name}. En este momento no podemos atenderte personalmente, pero yo puedo ayudarte.`;
+  }
   return `Hej! Du har kommit till ${company.name}. Vi är ute på jobb just nu, men jag kan hjälpa dig.`;
 }
 
@@ -215,6 +216,22 @@ function buildCreatePayload(
   payload.instructions = instructions;
   payload.greeting = buildGreeting(company);
   payload.webhook_url = `${WEBHOOK_BASE_URL}/api/webhooks/telnyx?slug=${company.slug}`;
+
+  // Override language settings for non-Swedish companies
+  if (company.language === "es") {
+    if (payload.voice_settings && typeof payload.voice_settings === "object") {
+      payload.voice_settings = {
+        ...(payload.voice_settings as Record<string, unknown>),
+        language_boost: "Spanish",
+      };
+    }
+    if (payload.transcription && typeof payload.transcription === "object") {
+      payload.transcription = {
+        ...(payload.transcription as Record<string, unknown>),
+        language: "es",
+      };
+    }
+  }
 
   return payload;
 }

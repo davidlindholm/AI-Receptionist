@@ -12,6 +12,7 @@ export interface Company {
   accentColor: string;        // Brand accent/CTA colour (hex)
   description: string;        // One-line description for admin page
   assistantId: string;        // Telnyx AI Assistant id (used to tag inbound calls)
+  language?: "sv" | "es";     // Voice/transcription language (default: "sv")
 }
 
 export const COMPANIES: Company[] = [
@@ -102,6 +103,30 @@ export const COMPANIES: Company[] = [
     accentColor: "#475569",
     description: "Fuktsanering, vattenskadesanering, avfuktning och mögelsanering",
     assistantId: "assistant-240abcbf-1a34-481c-99b8-33393d12f3c1",
+  },
+  {
+    slug: "eljardin",
+    name: "El Jardín Restaurante",
+    industry: "Restaurante",
+    serviceType: "Restaurante",
+    demoPath: "/demo-eljardin",
+    primaryColor: "#b45309",
+    accentColor: "#dc2626",
+    description: "Cocina mediterránea, eventos privados, catering y reservaciones",
+    assistantId: "assistant-86028a93-29e4-4dc7-9327-7569fd198db6",
+    language: "es",
+  },
+  {
+    slug: "belleza-latina",
+    name: "Belleza Latina Estética",
+    industry: "Estética",
+    serviceType: "Estética",
+    demoPath: "/demo-belleza-latina",
+    primaryColor: "#be185d",
+    accentColor: "#7c3aed",
+    description: "Tratamientos faciales, corporales, uñas, depilación y maquillaje",
+    assistantId: "assistant-3e082d5d-4922-40dd-9203-046fa086a781",
+    language: "es",
   },
 ];
 

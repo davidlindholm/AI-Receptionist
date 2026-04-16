@@ -17,7 +17,7 @@ export interface NightclubConfig {
     mapsUrl: string;
     whatsappNumber?: string;
   };
-  event: {
+  event?: {
     label: string;          // e.g. "GRAN INAUGURACIÓN"
     date: string;           // e.g. "20 DE MARZO 2026"
     artist: string;         // e.g. "Diego Morán"
@@ -200,29 +200,43 @@ export function NightclubLandingPage({ config }: { config: NightclubConfig }) {
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
 
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto pt-24">
-          {/* Eyebrow */}
-          <p className="text-xs sm:text-sm font-bold tracking-[0.3em] text-amber-400 uppercase mb-4">
-            {config.event.label}
-          </p>
-
-          {/* Date — hero headline */}
-          <h1 className="text-5xl sm:text-7xl md:text-8xl font-extrabold leading-none mb-4 bg-gradient-to-r from-red-500 via-amber-400 to-blue-400 bg-clip-text text-transparent drop-shadow-2xl">
-            {config.event.date}
-          </h1>
-
-          {/* Club name */}
-          <p className="text-xl sm:text-2xl font-semibold text-white/90 mb-2">
-            {config.hero.subtitle}
-          </p>
-
-          {/* Artist */}
-          <p className="text-base sm:text-lg text-white/60 mb-8">
-            Artista estelar:{" "}
-            <span className="text-amber-400 font-bold">{config.event.artist}</span>
-            {config.event.extraTag && (
-              <> &bull; <span className="text-blue-400">{config.event.extraTag}</span></>
-            )}
-          </p>
+          {config.event ? (
+            <>
+              {/* Eyebrow */}
+              <p className="text-xs sm:text-sm font-bold tracking-[0.3em] text-amber-400 uppercase mb-4">
+                {config.event.label}
+              </p>
+              {/* Date — hero headline */}
+              <h1 className="text-5xl sm:text-7xl md:text-8xl font-extrabold leading-none mb-4 bg-gradient-to-r from-red-500 via-amber-400 to-blue-400 bg-clip-text text-transparent drop-shadow-2xl">
+                {config.event.date}
+              </h1>
+              {/* Club name */}
+              <p className="text-xl sm:text-2xl font-semibold text-white/90 mb-2">
+                {config.hero.subtitle}
+              </p>
+              {/* Artist */}
+              <p className="text-base sm:text-lg text-white/60 mb-8">
+                Artista estelar:{" "}
+                <span className="text-amber-400 font-bold">{config.event.artist}</span>
+                {config.event.extraTag && (
+                  <> &bull; <span className="text-blue-400">{config.event.extraTag}</span></>
+                )}
+              </p>
+            </>
+          ) : (
+            <>
+              {/* Club name as main headline */}
+              <p className="text-xs sm:text-sm font-bold tracking-[0.3em] text-amber-400 uppercase mb-4">
+                Querétaro, México
+              </p>
+              <h1 className="text-5xl sm:text-7xl md:text-8xl font-extrabold leading-none mb-6 bg-gradient-to-r from-red-500 via-amber-400 to-blue-400 bg-clip-text text-transparent drop-shadow-2xl">
+                {config.brand.logoText}
+              </h1>
+              <p className="text-xl sm:text-2xl font-semibold text-white/90 mb-8">
+                {config.hero.subtitle}
+              </p>
+            </>
+          )}
 
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -243,31 +257,33 @@ export function NightclubLandingPage({ config }: { config: NightclubConfig }) {
         </div>
       </section>
 
-      {/* ── INAUGURATION BANNER ─────────────────────────────────────────────── */}
-      <section
-        id="eventos"
-        className="relative overflow-hidden py-8 px-4"
-        style={{ background: "linear-gradient(90deg, #7f1d1d 0%, #dc2626 35%, #b45309 65%, #f59e0b 100%)" }}
-      >
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-4 text-center sm:text-left">
-          <div className="text-4xl">🎺</div>
-          <div>
-            <p className="text-xs font-bold tracking-[0.25em] text-white/70 uppercase">
-              {config.event.festivalName}
-            </p>
-            <p className="text-xl sm:text-2xl font-extrabold text-white">
-              Artista Estelar:{" "}
-              <span className="text-yellow-200">{config.event.artist}</span>
-            </p>
-            {config.event.extraTag && (
-              <p className="text-sm font-semibold text-white/80 mt-0.5">
-                {config.event.extraTag} &bull; {config.event.date}
+      {/* ── EVENT BANNER — only shown when event is configured ─────────────── */}
+      {config.event && (
+        <section
+          id="eventos"
+          className="relative overflow-hidden py-8 px-4"
+          style={{ background: "linear-gradient(90deg, #7f1d1d 0%, #dc2626 35%, #b45309 65%, #f59e0b 100%)" }}
+        >
+          <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-4 text-center sm:text-left">
+            <div className="text-4xl">🎺</div>
+            <div>
+              <p className="text-xs font-bold tracking-[0.25em] text-white/70 uppercase">
+                {config.event.festivalName}
               </p>
-            )}
+              <p className="text-xl sm:text-2xl font-extrabold text-white">
+                Artista Estelar:{" "}
+                <span className="text-yellow-200">{config.event.artist}</span>
+              </p>
+              {config.event.extraTag && (
+                <p className="text-sm font-semibold text-white/80 mt-0.5">
+                  {config.event.extraTag} &bull; {config.event.date}
+                </p>
+              )}
+            </div>
+            <div className="text-4xl">🎶</div>
           </div>
-          <div className="text-4xl">🎶</div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ── ABOUT ───────────────────────────────────────────────────────────── */}
       <section id="nosotros" className="py-20 px-4 bg-[#0d0d0d]">

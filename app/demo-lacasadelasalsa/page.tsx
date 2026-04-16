@@ -14,13 +14,6 @@ const config: NightclubConfig = {
     mapsUrl: "https://maps.app.goo.gl/5o1rpHrMmVjxbJmM7",
     whatsappNumber: "+524428630255",
   },
-  event: {
-    label: "GRAN INAUGURACIÓN",
-    date: "20 DE MARZO 2026",
-    artist: "Diego Morán",
-    festivalName: "Festival de la Salsa 2026",
-    extraTag: "Mambo Swing",
-  },
   hero: {
     image: "/salsa/exterior.png",
     subtitle: "Tu mesa, tu ritmo, tu noche — Querétaro",
@@ -117,7 +110,7 @@ const config: NightclubConfig = {
       "Seguro de responsabilidad",
     ],
   },
-  agentId: "TODO_TELNYX_AGENT_ID",
+  agentId: "assistant-f51ed302-e020-45c1-8bf7-abc1f0345f9d",
 };
 
 export default function DemoLaCasaDeLaSalsaPage() {

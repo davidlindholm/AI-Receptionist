@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "standalone",
   // Makes server-side env vars available at runtime on Amplify.
   // These are NOT exposed to the browser — keys stay server-side only.
   serverRuntimeConfig: {

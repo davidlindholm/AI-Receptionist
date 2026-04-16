@@ -31,7 +31,7 @@ import { COMPANIES, type Company } from "../lib/companies";
 // ---------------------------------------------------------------------------
 
 const NIMOZ_ASSISTANT_ID = "assistant-1187a5d8-a489-4e2b-b67c-c817d556df0a";
-const WEBHOOK_BASE_URL = "https://ai-receptionist-two-iota.vercel.app";
+const WEBHOOK_BASE_URL = "https://growthnetworksystem.com";
 const TELNYX_API_BASE = "https://api.telnyx.com/v2";
 
 const __filename = fileURLToPath(import.meta.url);

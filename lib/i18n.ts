@@ -52,6 +52,23 @@ const strings = {
   cookies:           { sv: "Cookies & Integritetspolicy",
                        es: "Cookies y Política de Privacidad" },
 
+  // ── Call detail page ───────────────────────────────────────────────────
+  back:              { sv: "← Tillbaka",          es: "← Volver" },
+  callDetails:       { sv: "Samtalsdetaljer",     es: "Detalles de llamada" },
+  unknownCaller:     { sv: "Okänd uppringare",    es: "Llamante desconocido" },
+  service:           { sv: "Tjänst",              es: "Servicio" },
+  status:            { sv: "Status",              es: "Estado" },
+  time:              { sv: "Tid",                 es: "Hora" },
+  summary:           { sv: "Sammanfattning",      es: "Resumen" },
+  recording:         { sv: "Inspelning",          es: "Grabación" },
+  openRecording:     { sv: "Öppna inspelning i ny flik", es: "Abrir grabación en nueva pestaña" },
+  transcript:        { sv: "Transkribering",      es: "Transcripción" },
+  audioNotSupported: { sv: "Din webbläsare stödjer inte ljuduppspelning.",
+                       es: "Tu navegador no soporta reproducción de audio." },
+  urgent:            { sv: "Brådskande",          es: "Urgente" },
+  normal:            { sv: "Normal",              es: "Normal" },
+  callsTotal:        { sv: "samtal totalt",       es: "llamadas en total" },
+
   // ── Dashboard ─────────────────────────────────────────────────────────
   noCalls:           { sv: "Inga samtal ännu",          es: "Sin llamadas aún" },
   callsFiltered:     { sv: "samtal — filtrerat på företag",

@@ -27,7 +27,7 @@ SOBRE EL CLUB:
 La Casa de la Salsa Latin Room es un club nocturno en Querétaro dedicado a la salsa latina y su cultura. Música en vivo, ambiente vibrante y noches llenas de sabor, ritmo y pasión.
 
 PROMOCIONES:
-• Jueves: 2×1 en botellas y bebidas participantes
+• Jueves: 2 por 1 en botellas y bebidas participantes
 • Viernes: Cumpleañeros NO pagan cover
 
 DIRECCIÓN:

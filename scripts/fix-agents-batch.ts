@@ -19,6 +19,7 @@ import { COMPANIES } from "../lib/companies";
 const TELNYX_API_BASE = "https://api.telnyx.com/v2";
 const SPANISH_INSIGHT_GROUP_ID = "85913ad8-f6ba-4602-8ad8-8dad9edc3000";
 const NIMOZ_ASSISTANT_ID = "assistant-1187a5d8-a489-4e2b-b67c-c817d556df0a";
+const WEBHOOK_BASE_URL = "https://ai-receptionist-two-iota.vercel.app";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -130,11 +131,11 @@ async function main() {
       }
     }
 
-    // ── Fix 2: Greeting with "How can I help you?" ───────────────────
+    // ── Fix 2: Greeting — named assistant, no "unavailable" language ─────
     const newGreeting =
       lang === "es"
-        ? `¡Hola! Has contactado a ${company.name}. En este momento no podemos atenderte personalmente, pero yo puedo atenderte. ¿En qué puedo ayudarte?`
-        : `Hej! Du har kommit till ${company.name}. Vi är ute på jobb just nu, men jag står till tjänst. Hur kan jag hjälpa dig?`;
+        ? `¡Hola! Has contactado a ${company.name}. Yo soy Pedro, ¿en qué puedo ayudarte?`
+        : `Hej! Du har kommit till ${company.name}. Jag är Martin, hur kan jag hjälpa dig?`;
 
     if (current.greeting !== newGreeting) {
       updates.greeting = newGreeting;
@@ -187,6 +188,15 @@ async function main() {
       }
     }
 
+    // ── Fix 5: Webhook URL ────────────────────────────────────────────
+    const expectedWebhook = `${WEBHOOK_BASE_URL}/api/webhooks/telnyx?slug=${company.slug}`;
+    if (current.webhook_url !== expectedWebhook) {
+      updates.webhook_url = expectedWebhook;
+      console.log(`  [webhook] ${(current.webhook_url as string) ?? "null"} → ${expectedWebhook}`);
+    } else {
+      console.log(`  [webhook] ✓ already correct`);
+    }
+
     // ── Apply updates ────────────────────────────────────────────────
     if (Object.keys(updates).length > 0) {
       try {
@@ -220,10 +230,14 @@ async function main() {
     const ig = (a.insight_settings as Record<string, unknown>)?.insight_group_id;
     const vs = a.voice_settings as Record<string, unknown> | undefined;
 
+    const expectedWH = `${WEBHOOK_BASE_URL}/api/webhooks/telnyx?slug=${company.slug}`;
+    const hasWebhook = a.webhook_url === expectedWH;
+
     const lang = company.language ?? "sv";
     const checks = [
       hasHangup ? "✓hangup" : "✗hangup",
       endsWithQuestion ? "✓greeting" : "✗greeting",
+      hasWebhook ? "✓webhook" : "✗webhook",
     ];
     if (lang === "es") {
       checks.push(

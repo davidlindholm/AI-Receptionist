@@ -166,9 +166,9 @@ async function updateAssistant(id: string, payload: Record<string, unknown>): Pr
  */
 function buildGreeting(company: Company): string {
   if (company.language === "es") {
-    return `¡Hola! Has contactado a ${company.name}. En este momento no podemos atenderte personalmente, pero yo puedo atenderte. ¿En qué puedo ayudarte?`;
+    return `¡Hola! Has contactado a ${company.name}. Yo soy Pedro, ¿en qué puedo ayudarte?`;
   }
-  return `Hej! Du har kommit till ${company.name}. Vi är ute på jobb just nu, men jag står till tjänst. Hur kan jag hjälpa dig?`;
+  return `Hej! Du har kommit till ${company.name}. Jag är Martin, hur kan jag hjälpa dig?`;
 }
 
 // ---------------------------------------------------------------------------

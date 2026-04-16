@@ -29,7 +29,7 @@ const config: NightclubConfig = {
     ],
     facts: [
       { value: "Jue–Sáb", label: "Música en vivo" },
-      { value: "20 Mar", label: "Gran inauguración" },
+      { value: "Jue–Sáb", label: "Orquestas en vivo" },
       { value: "VIP", label: "Zona exclusiva" },
       { value: "24/7", label: "Asistente virtual" },
     ],
@@ -37,8 +37,8 @@ const config: NightclubConfig = {
   promos: [
     {
       day: "JUEVES",
-      title: "2×1 en botellas",
-      desc: "Todos los jueves: 2×1 en botellas y bebidas participantes. La excusa perfecta para empezar el fin de semana antes.",
+      title: "2 por 1 en botellas",
+      desc: "Todos los jueves: 2 por 1 en botellas y bebidas participantes. La excusa perfecta para empezar el fin de semana antes.",
       color: "red",
     },
     {
@@ -67,7 +67,7 @@ const config: NightclubConfig = {
     },
     {
       img: "/salsa/twoforonejueves.png",
-      title: "Jueves 2×1",
+      title: "Jueves 2 por 1",
       desc: "Botellas y bebidas participantes a mitad de precio todos los jueves. ¡El mejor plan de la semana!",
     },
     {

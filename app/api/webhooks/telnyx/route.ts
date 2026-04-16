@@ -9,7 +9,7 @@ import {
 import type { Lead } from "@/lib/leads-store";
 import { extractLeadFromTranscript } from "@/lib/lead-extraction";
 import { sendNotification } from "@/lib/notifications";
-import { getCompanyByAssistantId } from "@/lib/companies";
+import { getCompany, getCompanyByAssistantId } from "@/lib/companies";
 
 export async function POST(req: NextRequest) {
   // Read raw body first (needed for signature verification)
@@ -93,7 +93,11 @@ export async function POST(req: NextRequest) {
     }
 
     case "call_ended": {
-      const extracted = extractLeadFromTranscript(transcript ?? "");
+      const company = slug ? getCompany(slug) : null;
+      const extracted = extractLeadFromTranscript(transcript ?? "", {
+        companyServiceType: company?.serviceType,
+        hasUrgency: company?.hasUrgency,
+      });
 
       // Try to finalise an in-progress call first (Call Control flow).
       // finaliseCall reads transcript + recording_url from KV (stored by earlier events).

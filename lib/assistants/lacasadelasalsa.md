@@ -7,7 +7,7 @@ INFORMACIÓN DEL CLUB:
 - Teléfono: 442 863 0255
 
 PROMOCIONES:
-- Jueves: 2x1 en botellas y bebidas participantes
+- Jueves: 2 por 1 en botellas y bebidas participantes
 - Viernes: Cumpleañeros NO pagan cover
 
 Sigue siempre estos pasos en orden y haz UNA pregunta a la vez. Espera la respuesta antes de continuar.

@@ -13,6 +13,7 @@ export interface Company {
   description: string;        // One-line description for admin page
   assistantId: string;        // Telnyx AI Assistant id (used to tag inbound calls)
   language?: "sv" | "es";     // Voice/transcription language (default: "sv")
+  hasUrgency?: boolean;       // Whether urgency badges apply (default: true, false for nightclubs/estéticas/restaurants)
 }
 
 export const COMPANIES: Company[] = [
@@ -115,6 +116,7 @@ export const COMPANIES: Company[] = [
     description: "Cocina mediterránea, eventos privados, catering y reservaciones",
     assistantId: "assistant-86028a93-29e4-4dc7-9327-7569fd198db6",
     language: "es",
+    hasUrgency: false,
   },
   {
     slug: "belleza-latina",
@@ -127,6 +129,7 @@ export const COMPANIES: Company[] = [
     description: "Tratamientos faciales, corporales, uñas, depilación y maquillaje",
     assistantId: "assistant-3e082d5d-4922-40dd-9203-046fa086a781",
     language: "es",
+    hasUrgency: false,
   },
   {
     slug: "lacasadelasalsa",
@@ -137,8 +140,9 @@ export const COMPANIES: Company[] = [
     primaryColor: "#dc2626",
     accentColor: "#f59e0b",
     description: "Club nocturno de salsa latina en Querétaro — música en vivo, ambiente vibrante",
-    assistantId: "TODO_TELNYX_AGENT_ID",
+    assistantId: "assistant-f51ed302-e020-45c1-8bf7-abc1f0345f9d",
     language: "es",
+    hasUrgency: false,
   },
 ];
 

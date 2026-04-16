@@ -1,15 +1,22 @@
 import Link from "next/link";
 import { UrgencyBadge } from "./UrgencyBadge";
 import type { Lead } from "@/lib/leads-store";
+import type { Lang } from "@/lib/i18n";
 
-function formatTime(date: Date): string {
-  return new Intl.DateTimeFormat("sv-SE", {
+function formatTime(date: Date, lang: Lang = "sv"): string {
+  return new Intl.DateTimeFormat(lang === "es" ? "es-MX" : "sv-SE", {
     dateStyle: "short",
     timeStyle: "short",
   }).format(new Date(date));
 }
 
-export function CallCard({ lead }: { lead: Lead }) {
+interface CallCardProps {
+  lead: Lead;
+  lang?: Lang;
+  showUrgency?: boolean;
+}
+
+export function CallCard({ lead, lang = "sv", showUrgency = true }: CallCardProps) {
   return (
     <Link
       href={`/dashboard/calls/${lead.id}`}
@@ -21,7 +28,7 @@ export function CallCard({ lead }: { lead: Lead }) {
             <p className="font-semibold text-gray-900 truncate">
               {lead.caller_name ?? lead.caller_phone}
             </p>
-            <UrgencyBadge urgency={lead.urgency} />
+            <UrgencyBadge urgency={lead.urgency} lang={lang} show={showUrgency} />
           </div>
           {lead.caller_name && (
             <p className="text-sm text-gray-500 mt-0.5">{lead.caller_phone}</p>
@@ -39,7 +46,7 @@ export function CallCard({ lead }: { lead: Lead }) {
         </div>
         <div className="shrink-0 text-right">
           <p className="text-xs text-gray-400 whitespace-nowrap">
-            {formatTime(lead.created_at)}
+            {formatTime(lead.created_at, lang)}
           </p>
           <p className="mt-1 text-xs text-gray-400 capitalize">{lead.status}</p>
         </div>

@@ -18,7 +18,7 @@ export interface NightclubConfig {
     whatsappNumber?: string;
   };
   event?: {
-    label: string;          // e.g. "GRAN INAUGURACIÓN"
+    label: string;          // e.g. "NOCHE ESPECIAL"
     date: string;           // e.g. "20 DE MARZO 2026"
     artist: string;         // e.g. "Diego Morán"
     festivalName: string;   // e.g. "Festival de la Salsa 2026"

@@ -88,7 +88,12 @@ export default async function CompanyDashboardPage({ params }: Props) {
               {t("latestCalls", lang)}
             </h2>
             {leads.map((lead) => (
-              <CallCard key={lead.id} lead={lead} />
+              <CallCard
+                key={lead.id}
+                lead={lead}
+                lang={lang}
+                showUrgency={company.hasUrgency !== false}
+              />
             ))}
           </div>
         )}

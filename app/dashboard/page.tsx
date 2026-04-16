@@ -2,6 +2,8 @@ import { getLeads } from "@/lib/leads-store";
 import { CallCard } from "@/components/CallCard";
 import { SimulateButton } from "@/components/SimulateButton";
 import { ClearButton } from "@/components/ClearButton";
+import { getCompany } from "@/lib/companies";
+import type { Lang } from "@/lib/i18n";
 
 // Re-render on every request so new calls show immediately
 export const dynamic = "force-dynamic";
@@ -38,9 +40,21 @@ export default async function DashboardPage() {
             <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400">
               Senaste samtal
             </h2>
-            {leads.map((lead) => (
-              <CallCard key={lead.id} lead={lead} />
-            ))}
+            {leads.map((lead) => {
+              const company = lead.company_slug
+                ? getCompany(lead.company_slug)
+                : undefined;
+              const lang: Lang = company?.language ?? "sv";
+              const showUrgency = company?.hasUrgency !== false;
+              return (
+                <CallCard
+                  key={lead.id}
+                  lead={lead}
+                  lang={lang}
+                  showUrgency={showUrgency}
+                />
+              );
+            })}
           </div>
         )}
       </main>
@@ -55,7 +69,7 @@ function EmptyState() {
       <h2 className="text-lg font-semibold text-gray-700">Inga samtal ännu</h2>
       <p className="mt-1 text-sm text-gray-500 max-w-sm">
         Samtal som tas emot via Telnyx visas här direkt. Klicka på{" "}
-        <span className="font-medium">"Simulera samtal"</span> för att testa
+        <span className="font-medium">&quot;Simulera samtal&quot;</span> för att testa
         flödet utan ett riktigt telefonsamtal.
       </p>
     </div>

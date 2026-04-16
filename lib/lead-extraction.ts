@@ -53,6 +53,7 @@ const SERVICE_TYPE_MAP: [RegExp, string][] = [
   [/bevakning|väktare|vaktnord|vaktmästeri/i, "Bevakning"],
   [/sanering|fuktsanering|vattenskada|mögel|asbest/i, "Sanering"],
   // Spanish industries
+  [/club\s*nocturno|discoteca|antro|salsa|noche|cover|pista/i, "Club nocturno"],
   [/reserv(?:a|aci[oó]n)|mesa|restaurante|comida|cena|almuerzo/i, "Restaurante"],
   [/cita|tratamiento|facial|corporal|u[ñn]as|depilaci[oó]n|maquillaje|est[eé]tica|belleza/i, "Estética"],
 ];
@@ -66,19 +67,30 @@ const NAME_PATTERNS = [
   /(?:me llamo|mi nombre es|soy)\s+([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)?)/,
 ];
 
-export function extractLeadFromTranscript(transcript: string): ExtractedLead {
+export interface ExtractionOptions {
+  /** Company service type — used as fallback when regex doesn't match */
+  companyServiceType?: string | null;
+  /** If false, urgency is always "normal" (e.g. nightclubs, restaurants) */
+  hasUrgency?: boolean;
+}
+
+export function extractLeadFromTranscript(
+  transcript: string,
+  options: ExtractionOptions = {}
+): ExtractedLead {
   if (!transcript || transcript.trim() === "") {
     return { caller_name: null, service_type: null, urgency: "normal", summary: null };
   }
 
   const lower = transcript.toLowerCase();
 
-  // Urgency
-  const urgency: Urgency = URGENT_KEYWORDS.some((kw) =>
-    lower.includes(kw.toLowerCase())
-  )
-    ? "urgent"
-    : "normal";
+  // Urgency — skip for businesses where urgency doesn't apply
+  const urgency: Urgency =
+    options.hasUrgency === false
+      ? "normal"
+      : URGENT_KEYWORDS.some((kw) => lower.includes(kw.toLowerCase()))
+        ? "urgent"
+        : "normal";
 
   // Service type
   let service_type: string | null = null;
@@ -104,5 +116,10 @@ export function extractLeadFromTranscript(transcript: string): ExtractedLead {
     transcript.trim().slice(0, 200) +
     (transcript.length > 200 ? "…" : "");
 
-  return { caller_name, service_type, urgency, summary };
+  return {
+    caller_name,
+    service_type: service_type ?? options.companyServiceType ?? null,
+    urgency,
+    summary,
+  };
 }

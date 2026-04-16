@@ -1,12 +1,14 @@
 import { getLeadById } from "@/lib/leads-store";
 import { UrgencyBadge } from "@/components/UrgencyBadge";
+import { getCompany } from "@/lib/companies";
+import { t, type Lang } from "@/lib/i18n";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
-function formatDateTime(date: Date): string {
-  return new Intl.DateTimeFormat("sv-SE", {
+function formatDateTime(date: Date, lang: Lang): string {
+  return new Intl.DateTimeFormat(lang === "es" ? "es-MX" : "sv-SE", {
     dateStyle: "long",
     timeStyle: "short",
   }).format(new Date(date));
@@ -20,6 +22,10 @@ export default async function CallDetailPage({
   const lead = await getLeadById(params.id);
   if (!lead) notFound();
 
+  const company = lead.company_slug ? getCompany(lead.company_slug) : undefined;
+  const lang: Lang = company?.language ?? "sv";
+  const showUrgency = company?.hasUrgency !== false;
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -29,9 +35,9 @@ export default async function CallDetailPage({
             href="/dashboard"
             className="text-sm text-gray-500 hover:text-gray-900"
           >
-            ← Tillbaka
+            {t("back", lang)}
           </Link>
-          <h1 className="text-xl font-bold text-gray-900">Samtalsdetaljer</h1>
+          <h1 className="text-xl font-bold text-gray-900">{t("callDetails", lang)}</h1>
         </div>
       </header>
 
@@ -41,17 +47,17 @@ export default async function CallDetailPage({
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div>
               <h2 className="text-lg font-semibold text-gray-900">
-                {lead.caller_name ?? "Okänd uppringare"}
+                {lead.caller_name ?? t("unknownCaller", lang)}
               </h2>
               <p className="text-sm text-gray-500">{lead.caller_phone}</p>
             </div>
-            <UrgencyBadge urgency={lead.urgency} />
+            <UrgencyBadge urgency={lead.urgency} lang={lang} show={showUrgency} />
           </div>
 
           <dl className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3">
             <div>
               <dt className="text-xs font-medium text-gray-400 uppercase tracking-wide">
-                Tjänst
+                {t("service", lang)}
               </dt>
               <dd className="mt-1 text-sm text-gray-800">
                 {lead.service_type ?? "—"}
@@ -59,7 +65,7 @@ export default async function CallDetailPage({
             </div>
             <div>
               <dt className="text-xs font-medium text-gray-400 uppercase tracking-wide">
-                Status
+                {t("status", lang)}
               </dt>
               <dd className="mt-1 text-sm text-gray-800 capitalize">
                 {lead.status}
@@ -67,10 +73,10 @@ export default async function CallDetailPage({
             </div>
             <div>
               <dt className="text-xs font-medium text-gray-400 uppercase tracking-wide">
-                Tid
+                {t("time", lang)}
               </dt>
               <dd className="mt-1 text-sm text-gray-800">
-                {formatDateTime(lead.created_at)}
+                {formatDateTime(lead.created_at, lang)}
               </dd>
             </div>
           </dl>
@@ -78,7 +84,7 @@ export default async function CallDetailPage({
           {lead.summary && (
             <div className="mt-4 rounded-md bg-gray-50 p-3">
               <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">
-                Sammanfattning
+                {t("summary", lang)}
               </p>
               <p className="text-sm text-gray-700">{lead.summary}</p>
             </div>
@@ -89,10 +95,10 @@ export default async function CallDetailPage({
         {lead.recording_url && (
           <section className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
             <h3 className="text-sm font-semibold text-gray-700 mb-3">
-              Inspelning
+              {t("recording", lang)}
             </h3>
             <audio controls className="w-full" src={lead.recording_url}>
-              Din webbläsare stödjer inte ljuduppspelning.
+              {t("audioNotSupported", lang)}
             </audio>
             <a
               href={lead.recording_url}
@@ -100,7 +106,7 @@ export default async function CallDetailPage({
               rel="noopener noreferrer"
               className="mt-2 inline-block text-xs text-indigo-600 hover:underline"
             >
-              Öppna inspelning i ny flik
+              {t("openRecording", lang)}
             </a>
           </section>
         )}
@@ -109,7 +115,7 @@ export default async function CallDetailPage({
         {lead.transcript && (
           <section className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
             <h3 className="text-sm font-semibold text-gray-700 mb-3">
-              Transkribering
+              {t("transcript", lang)}
             </h3>
             <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">
               {lead.transcript}

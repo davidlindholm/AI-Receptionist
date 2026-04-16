@@ -128,6 +128,18 @@ export const COMPANIES: Company[] = [
     assistantId: "assistant-3e082d5d-4922-40dd-9203-046fa086a781",
     language: "es",
   },
+  {
+    slug: "lacasadelasalsa",
+    name: "La Casa de la Salsa Latin Room",
+    industry: "Club nocturno",
+    serviceType: "Club nocturno",
+    demoPath: "/demo-lacasadelasalsa",
+    primaryColor: "#dc2626",
+    accentColor: "#f59e0b",
+    description: "Club nocturno de salsa latina en Querétaro — música en vivo, ambiente vibrante",
+    assistantId: "TODO_TELNYX_AGENT_ID",
+    language: "es",
+  },
 ];
 
 export function getCompany(slug: string): Company | undefined {

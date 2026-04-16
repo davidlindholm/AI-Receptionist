@@ -166,9 +166,9 @@ async function updateAssistant(id: string, payload: Record<string, unknown>): Pr
  */
 function buildGreeting(company: Company): string {
   if (company.language === "es") {
-    return `¡Hola! Has contactado a ${company.name}. En este momento no podemos atenderte personalmente, pero yo puedo ayudarte. ¿En qué puedo ayudarte?`;
+    return `¡Hola! Has contactado a ${company.name}. En este momento no podemos atenderte personalmente, pero yo puedo atenderte. ¿En qué puedo ayudarte?`;
   }
-  return `Hej! Du har kommit till ${company.name}. Vi är ute på jobb just nu, men jag kan hjälpa dig. Hur kan jag hjälpa dig?`;
+  return `Hej! Du har kommit till ${company.name}. Vi är ute på jobb just nu, men jag står till tjänst. Hur kan jag hjälpa dig?`;
 }
 
 // ---------------------------------------------------------------------------
@@ -217,6 +217,13 @@ function buildCreatePayload(
   payload.instructions = instructions;
   payload.greeting = buildGreeting(company);
   payload.webhook_url = `${WEBHOOK_BASE_URL}/api/webhooks/telnyx?slug=${company.slug}`;
+
+  // Hang up after 30s of caller silence (nested under telephony_settings)
+  if (payload.telephony_settings && typeof payload.telephony_settings === "object") {
+    (payload.telephony_settings as Record<string, unknown>).user_idle_timeout_secs = 30;
+  } else {
+    payload.telephony_settings = { user_idle_timeout_secs: 30 };
+  }
 
   // Always add hangup tool so the bot can end calls after farewell
   const hangupDesc =

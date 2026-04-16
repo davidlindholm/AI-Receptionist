@@ -133,8 +133,8 @@ async function main() {
     // ── Fix 2: Greeting with "How can I help you?" ───────────────────
     const newGreeting =
       lang === "es"
-        ? `¡Hola! Has contactado a ${company.name}. En este momento no podemos atenderte personalmente, pero yo puedo ayudarte. ¿En qué puedo ayudarte?`
-        : `Hej! Du har kommit till ${company.name}. Vi är ute på jobb just nu, men jag kan hjälpa dig. Hur kan jag hjälpa dig?`;
+        ? `¡Hola! Has contactado a ${company.name}. En este momento no podemos atenderte personalmente, pero yo puedo atenderte. ¿En qué puedo ayudarte?`
+        : `Hej! Du har kommit till ${company.name}. Vi är ute på jobb just nu, men jag står till tjänst. Hur kan jag hjälpa dig?`;
 
     if (current.greeting !== newGreeting) {
       updates.greeting = newGreeting;

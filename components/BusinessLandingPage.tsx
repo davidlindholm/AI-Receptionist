@@ -263,9 +263,9 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.items.map(({ img, title, desc }) => (
-              <div key={title}
+              <div key={title} data-open-widget role="button" tabIndex={0}
                 className="group rounded-lg overflow-hidden border border-[#edf0f7]
-                           hover:shadow-lg transition-all duration-200">
+                           hover:shadow-lg transition-all duration-200 cursor-pointer">
                 <div className="overflow-hidden h-48">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={img} alt={title}
@@ -420,8 +420,8 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
                 </svg>
                 hCaptcha
               </div>
-              <button type="submit"
-                className="w-full rounded-[10px] py-3.5 font-semibold text-white text-[15px] transition-colors"
+              <button type="button" data-open-widget
+                className="w-full rounded-[10px] py-3.5 font-semibold text-white text-[15px] transition-colors cursor-pointer"
                 style={{ backgroundColor: colors.accent }}
                 onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = colors.accentHover)}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = colors.accent)}>
@@ -437,11 +437,13 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
                 <p className="text-white/70 text-[15px] mb-8">{t("contactDirectSub", lang)}</p>
                 <div className="space-y-5">
                   {[
-                    { Icon: IconPhone, label: t("phone", lang), value: brand.phone },
-                    { Icon: IconMail,  label: t("email", lang),  value: brand.email },
-                    { Icon: IconPin,   label: t("address", lang),  value: brand.addressShort ?? brand.address },
-                  ].map(({ Icon, label, value }) => (
-                    <div key={label} className="flex items-start gap-3">
+                    { Icon: IconPhone, label: t("phone", lang), value: brand.phone, clickable: true },
+                    { Icon: IconMail,  label: t("email", lang),  value: brand.email, clickable: true },
+                    { Icon: IconPin,   label: t("address", lang),  value: brand.addressShort ?? brand.address, clickable: false },
+                  ].map(({ Icon, label, value, clickable }) => (
+                    <div key={label}
+                      {...(clickable ? { "data-open-widget": true, role: "button", tabIndex: 0 } : {})}
+                      className={`flex items-start gap-3${clickable ? " cursor-pointer hover:opacity-80 transition-opacity" : ""}`}>
                       <Icon className="w-5 h-5 text-white/70 shrink-0 mt-0.5" />
                       <div>
                         <p className="font-semibold text-[15px]">{label}</p>
@@ -525,13 +527,14 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
           <p className="text-[#2b2e33]/50 text-[17px] mb-10">{t("contactSub", lang)}</p>
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { Icon: IconPhone, title: t("phone", lang),  value: brand.phone, sub: t("phoneHours", lang) },
-              { Icon: IconMail,  title: t("email", lang),   value: brand.email, sub: t("emailResponse", lang) },
-              { Icon: IconPin,   title: t("address", lang),   value: brand.address, sub: t("officeHours", lang) },
-            ].map(({ Icon, title, value, sub }) => (
+              { Icon: IconPhone, title: t("phone", lang),  value: brand.phone, sub: t("phoneHours", lang), clickable: true },
+              { Icon: IconMail,  title: t("email", lang),   value: brand.email, sub: t("emailResponse", lang), clickable: true },
+              { Icon: IconPin,   title: t("address", lang),   value: brand.address, sub: t("officeHours", lang), clickable: false },
+            ].map(({ Icon, title, value, sub, clickable }) => (
               <div key={title}
-                className="rounded-lg bg-white border border-[#edf0f7] p-6 shadow-sm text-center
-                           hover:shadow-md transition-all duration-200">
+                {...(clickable ? { "data-open-widget": true, role: "button", tabIndex: 0 } : {})}
+                className={`rounded-lg bg-white border border-[#edf0f7] p-6 shadow-sm text-center
+                           hover:shadow-md transition-all duration-200${clickable ? " cursor-pointer" : ""}`}>
                 <div className="mx-auto mb-4 w-12 h-12 rounded-full flex items-center justify-center"
                   style={{ backgroundColor: `${colors.primary}1a` }}>
                   <span style={{ color: colors.primary }}><Icon className="w-6 h-6" /></span>

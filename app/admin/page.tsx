@@ -8,7 +8,7 @@ export default function AdminPage() {
       {/* Header */}
       <header className="border-b border-gray-200 bg-white">
         <div className="mx-auto max-w-5xl px-6 py-6">
-          <h1 className="text-2xl font-bold text-gray-900">AI Receptionist — Admin</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Growth Network System — Admin</h1>
           <p className="text-sm text-gray-500 mt-1">
             Alla demowebbplatser och deras respektive dashboards
           </p>

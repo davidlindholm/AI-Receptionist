@@ -17,7 +17,7 @@ export default async function DashboardPage() {
       <header className="border-b border-gray-200 bg-white">
         <div className="mx-auto max-w-4xl px-4 py-5 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">AI Receptionist</h1>
+            <h1 className="text-xl font-bold text-gray-900">Growth Network System</h1>
             <p className="text-sm text-gray-500">
               {leads.length === 0
                 ? "Inga samtal ännu"

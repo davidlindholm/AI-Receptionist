@@ -82,6 +82,18 @@ const strings = {
   emptyMatchPost:    { sv: "visas här. Klicka på",      es: "se mostrarán aquí. Haz clic en" },
   emptyMatchEnd:     { sv: "för att testa flödet.",     es: "para probar el flujo." },
 
+  // ── Admin page ────────────────────────────────────────────────────────
+  adminTitle:        { sv: "Growth Network System — Admin", es: "Growth Network System — Admin" },
+  adminSubtitle:     { sv: "Alla demowebbplatser och dashboards",
+                       es: "Todos los sitios demo y dashboards" },
+  globalDashboard:   { sv: "Alla samtal (global dashboard)",
+                       es: "Todas las llamadas (dashboard global)" },
+  globalDashboardSub:{ sv: "Visar samtliga leads oavsett tjänstetyp",
+                       es: "Muestra todos los leads sin importar el tipo" },
+  sweden:            { sv: "Sverige",              es: "Suecia" },
+  mexico:            { sv: "Mexiko",               es: "México" },
+  companies:         { sv: "Företag",              es: "Empresas" },
+
   // ── Buttons ───────────────────────────────────────────────────────────
   simulating:        { sv: "Simulerar…",                es: "Simulando…" },
   simulateCall:      { sv: "Simulera samtal",           es: "Simular llamada" },

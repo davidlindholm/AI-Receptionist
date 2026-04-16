@@ -173,14 +173,18 @@ export function NightclubLandingPage({ config }: { config: NightclubConfig }) {
 
           {/* Right side */}
           <div className="flex items-center gap-3">
-            <a
-              href={tel}
-              className="hidden sm:flex items-center gap-1.5 text-sm font-semibold text-amber-400 hover:text-amber-300"
-            >
-              <span>📞</span> {config.brand.phoneDisplay}
-            </a>
+            {wa && (
+              <a
+                href={wa}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden sm:flex items-center gap-1.5 text-sm font-semibold text-green-400 hover:text-green-300"
+              >
+                <span>💬</span> WhatsApp
+              </a>
+            )}
             <GoldButton className="text-sm py-2 px-4" dataAttr>
-              Reservar mesa
+              🎤 Asistente IA
             </GoldButton>
           </div>
         </div>
@@ -238,15 +242,25 @@ export function NightclubLandingPage({ config }: { config: NightclubConfig }) {
             </>
           )}
 
-          {/* CTAs */}
+          {/* CTAs — AI Voice + WhatsApp front and centre */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <GoldButton className="text-base py-3.5 px-8" dataAttr>
-              🎉 {config.hero.ctaPrimary}
+              🎤 Hablar con Pedro — Asistente IA
             </GoldButton>
-            <OutlineButton href={tel} className="text-base py-3.5 px-8">
-              📞 {config.hero.ctaSecondary}
-            </OutlineButton>
+            {wa && (
+              <a
+                href={wa}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#25D366] hover:bg-[#1ebe57] text-white font-bold px-8 py-3.5 rounded-full transition-all duration-200 shadow-lg shadow-green-900/40 text-base text-center"
+              >
+                💬 WhatsApp
+              </a>
+            )}
           </div>
+          <p className="mt-4 text-xs text-white/40">
+            Nuestro asistente de voz IA atiende 24/7 — pruébalo ahora
+          </p>
         </div>
 
         {/* Scroll arrow */}
@@ -284,6 +298,72 @@ export function NightclubLandingPage({ config }: { config: NightclubConfig }) {
           </div>
         </section>
       )}
+
+      {/* ── AI RECEPTIONIST — shown early so visitors see the demo functionality ── */}
+      <section className="py-20 px-4 bg-[#0d0d0d]">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-xs font-bold tracking-[0.25em] text-amber-400 uppercase mb-3">
+              Prueba nuestra tecnología
+            </p>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-3 leading-tight">
+              {config.aiSection.title}
+            </h2>
+            <p className="text-white/60 max-w-2xl mx-auto">{config.aiSection.body}</p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto mb-10">
+            {/* AI Voice Agent card */}
+            <div className="bg-[#111827] rounded-2xl border-2 border-amber-500/40 p-8 text-center shadow-xl shadow-amber-900/20">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-600 to-amber-500 flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg">
+                🎤
+              </div>
+              <h3 className="text-xl font-bold text-white mb-1">Pedro — Asistente de voz</h3>
+              <p className="text-xs text-amber-400/70 font-semibold uppercase tracking-wide mb-3">AI Voice Agent</p>
+              <p className="text-white/60 text-sm mb-6">
+                Habla directamente con nuestro asistente IA. Toma reservaciones, informa sobre eventos y responde al instante.
+              </p>
+              <GoldButton className="w-full text-base py-3.5" dataAttr>
+                🎤 Hablar con Pedro
+              </GoldButton>
+            </div>
+
+            {/* WhatsApp AI card */}
+            {wa && (
+              <div className="bg-[#111827] rounded-2xl border-2 border-green-500/40 p-8 text-center shadow-xl shadow-green-900/20">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-600 to-green-400 flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg">
+                  💬
+                </div>
+                <h3 className="text-xl font-bold text-white mb-1">Pedro — WhatsApp</h3>
+                <p className="text-xs text-green-400/70 font-semibold uppercase tracking-wide mb-3">AI Chatbot</p>
+                <p className="text-white/60 text-sm mb-6">
+                  Escríbenos por WhatsApp y recibe respuesta inmediata. Consulta promociones, cover y horarios.
+                </p>
+                <a
+                  href={wa}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full bg-[#25D366] hover:bg-[#1ebe57] text-white font-bold py-3.5 rounded-full transition-all duration-200 shadow-lg shadow-green-900/40 text-base text-center"
+                >
+                  💬 Abrir WhatsApp
+                </a>
+              </div>
+            )}
+          </div>
+
+          {/* Bullet points */}
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-3">
+            {config.aiSection.bullets.map((b, i) => (
+              <div key={i} className="flex items-center gap-2 text-white/70 text-sm">
+                <span className="w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center flex-shrink-0 text-black font-bold text-xs">
+                  ✓
+                </span>
+                {b}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ── ABOUT ───────────────────────────────────────────────────────────── */}
       <section id="nosotros" className="py-20 px-4 bg-[#0d0d0d]">
@@ -404,43 +484,7 @@ export function NightclubLandingPage({ config }: { config: NightclubConfig }) {
         </div>
       </section>
 
-      {/* ── AI RECEPTIONIST ─────────────────────────────────────────────────── */}
-      <section className="py-20 px-4 bg-[#0d0d0d]">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <p className="text-xs font-bold tracking-[0.25em] text-amber-400 uppercase mb-3">
-              Asistente virtual 24/7
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 leading-tight">
-              {config.aiSection.title}
-            </h2>
-            <p className="text-white/70 leading-relaxed mb-6">{config.aiSection.body}</p>
-            <ul className="space-y-3">
-              {config.aiSection.bullets.map((b, i) => (
-                <li key={i} className="flex items-start gap-3 text-white/80 text-sm">
-                  <span className="mt-0.5 w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center flex-shrink-0 text-black font-bold text-xs">
-                    ✓
-                  </span>
-                  {b}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="bg-[#111827] rounded-2xl border border-amber-500/30 p-8 text-center shadow-xl shadow-amber-900/20">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-600 to-amber-500 flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg">
-              🎙️
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2">Pedro — Asistente de voz</h3>
-            <p className="text-white/60 text-sm mb-6">
-              Responde al instante, incluso a las 2am. Toma reservaciones y consultas cuando el equipo no puede.
-            </p>
-            <GoldButton className="w-full text-base py-3.5" dataAttr>
-              🎤 Llamar ahora
-            </GoldButton>
-          </div>
-        </div>
-      </section>
+      {/* ── AI RECEPTIONIST (kept in DOM for scroll anchoring — visible earlier via reorder) ── */}
 
       {/* ── CONTACT ─────────────────────────────────────────────────────────── */}
       <section id="contacto" className="py-20 px-4 bg-[#111827]">
@@ -455,17 +499,41 @@ export function NightclubLandingPage({ config }: { config: NightclubConfig }) {
           </div>
 
           <div className="grid sm:grid-cols-3 gap-6 mb-10">
-            {/* Phone */}
-            <a
-              href={tel}
-              className="bg-[#0d0d0d] rounded-2xl border border-white/10 hover:border-amber-500/50 p-6 text-center transition-all group"
+            {/* AI Voice Agent */}
+            <button
+              data-open-widget="true"
+              className="bg-[#0d0d0d] rounded-2xl border border-amber-500/30 hover:border-amber-500/70 p-6 text-center transition-all group cursor-pointer"
             >
-              <div className="text-3xl mb-3">📞</div>
-              <p className="text-xs text-white/50 uppercase tracking-wide mb-1">Teléfono</p>
+              <div className="text-3xl mb-3">🎤</div>
+              <p className="text-xs text-amber-400/70 uppercase tracking-wide mb-1">Asistente de voz IA</p>
               <p className="font-bold text-amber-400 group-hover:text-amber-300">
-                {config.brand.phoneDisplay}
+                Hablar con Pedro
               </p>
-            </a>
+              <p className="text-xs text-white/40 mt-1">Disponible 24/7</p>
+            </button>
+
+            {/* WhatsApp */}
+            {wa ? (
+              <a
+                href={wa}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#0d0d0d] rounded-2xl border border-green-500/30 hover:border-green-500/70 p-6 text-center transition-all group"
+              >
+                <div className="text-3xl mb-3">💬</div>
+                <p className="text-xs text-green-400/70 uppercase tracking-wide mb-1">WhatsApp IA</p>
+                <p className="font-bold text-green-400 group-hover:text-green-300">
+                  Escríbenos
+                </p>
+                <p className="text-xs text-white/40 mt-1">Respuesta automática</p>
+              </a>
+            ) : (
+              <div className="bg-[#0d0d0d] rounded-2xl border border-white/10 p-6 text-center">
+                <div className="text-3xl mb-3">✉️</div>
+                <p className="text-xs text-white/50 uppercase tracking-wide mb-1">Email</p>
+                <p className="font-semibold text-white/80 text-sm">{config.brand.email}</p>
+              </div>
+            )}
 
             {/* Maps */}
             <a
@@ -480,35 +548,16 @@ export function NightclubLandingPage({ config }: { config: NightclubConfig }) {
                 {config.brand.addressShort}
               </p>
             </a>
-
-            {/* WhatsApp */}
-            {wa ? (
-              <a
-                href={wa}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-[#0d0d0d] rounded-2xl border border-white/10 hover:border-green-500/50 p-6 text-center transition-all group"
-              >
-                <div className="text-3xl mb-3">💬</div>
-                <p className="text-xs text-white/50 uppercase tracking-wide mb-1">WhatsApp</p>
-                <p className="font-bold text-green-400 group-hover:text-green-300">
-                  Escríbenos
-                </p>
-              </a>
-            ) : (
-              <div className="bg-[#0d0d0d] rounded-2xl border border-white/10 p-6 text-center">
-                <div className="text-3xl mb-3">✉️</div>
-                <p className="text-xs text-white/50 uppercase tracking-wide mb-1">Email</p>
-                <p className="font-semibold text-white/80 text-sm">{config.brand.email}</p>
-              </div>
-            )}
           </div>
 
-          {/* Address + maps button */}
+          {/* Address + phone + maps */}
           <div className="bg-[#0d0d0d] rounded-2xl border border-white/10 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <p className="text-xs text-white/50 uppercase tracking-wide mb-1">Dirección completa</p>
               <p className="text-white/80 font-medium">{config.brand.address}</p>
+              <p className="text-white/50 text-sm mt-1">
+                Tel: <a href={tel} className="text-amber-400 hover:text-amber-300">{config.brand.phoneDisplay}</a>
+              </p>
             </div>
             <a
               href={config.brand.mapsUrl}

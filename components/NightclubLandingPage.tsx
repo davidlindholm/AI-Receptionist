@@ -184,7 +184,7 @@ export function NightclubLandingPage({ config }: { config: NightclubConfig }) {
               </a>
             )}
             <GoldButton className="text-sm py-2 px-4" dataAttr>
-              🎤 Asistente IA
+              📞 Llámanos
             </GoldButton>
           </div>
         </div>
@@ -245,7 +245,7 @@ export function NightclubLandingPage({ config }: { config: NightclubConfig }) {
           {/* CTAs — AI Voice + WhatsApp front and centre */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <GoldButton className="text-base py-3.5 px-8" dataAttr>
-              🎤 Hablar con Pedro — Asistente IA
+              📞 Llámanos ahora
             </GoldButton>
             {wa && (
               <a
@@ -259,7 +259,7 @@ export function NightclubLandingPage({ config }: { config: NightclubConfig }) {
             )}
           </div>
           <p className="mt-4 text-xs text-white/40">
-            Nuestro asistente de voz IA atiende 24/7 — pruébalo ahora
+            Te atendemos las 24 horas, los 7 días de la semana
           </p>
         </div>
 
@@ -304,7 +304,7 @@ export function NightclubLandingPage({ config }: { config: NightclubConfig }) {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
             <p className="text-xs font-bold tracking-[0.25em] text-amber-400 uppercase mb-3">
-              Prueba nuestra tecnología
+              Contáctanos
             </p>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-3 leading-tight">
               {config.aiSection.title}
@@ -313,31 +313,29 @@ export function NightclubLandingPage({ config }: { config: NightclubConfig }) {
           </div>
 
           <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto mb-10">
-            {/* AI Voice Agent card */}
+            {/* Call card */}
             <div className="bg-[#111827] rounded-2xl border-2 border-amber-500/40 p-8 text-center shadow-xl shadow-amber-900/20">
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-600 to-amber-500 flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg">
-                🎤
+                📞
               </div>
-              <h3 className="text-xl font-bold text-white mb-1">Pedro — Asistente de voz</h3>
-              <p className="text-xs text-amber-400/70 font-semibold uppercase tracking-wide mb-3">AI Voice Agent</p>
+              <h3 className="text-xl font-bold text-white mb-1">Llámanos</h3>
               <p className="text-white/60 text-sm mb-6">
-                Habla directamente con nuestro asistente IA. Toma reservaciones, informa sobre eventos y responde al instante.
+                Pedro te atiende al instante. Reserva tu mesa, pregunta por el cover o por los eventos de la semana.
               </p>
               <GoldButton className="w-full text-base py-3.5" dataAttr>
-                🎤 Hablar con Pedro
+                📞 Llamar ahora
               </GoldButton>
             </div>
 
-            {/* WhatsApp AI card */}
+            {/* WhatsApp card */}
             {wa && (
               <div className="bg-[#111827] rounded-2xl border-2 border-green-500/40 p-8 text-center shadow-xl shadow-green-900/20">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-600 to-green-400 flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg">
                   💬
                 </div>
-                <h3 className="text-xl font-bold text-white mb-1">Pedro — WhatsApp</h3>
-                <p className="text-xs text-green-400/70 font-semibold uppercase tracking-wide mb-3">AI Chatbot</p>
+                <h3 className="text-xl font-bold text-white mb-1">Escríbenos</h3>
                 <p className="text-white/60 text-sm mb-6">
-                  Escríbenos por WhatsApp y recibe respuesta inmediata. Consulta promociones, cover y horarios.
+                  Mándanos un WhatsApp y Pedro te responde de inmediato. Promociones, cover, horarios — lo que necesites.
                 </p>
                 <a
                   href={wa}
@@ -499,13 +497,13 @@ export function NightclubLandingPage({ config }: { config: NightclubConfig }) {
           </div>
 
           <div className="grid sm:grid-cols-3 gap-6 mb-10">
-            {/* AI Voice Agent */}
+            {/* Call */}
             <button
               data-open-widget="true"
               className="bg-[#0d0d0d] rounded-2xl border border-amber-500/30 hover:border-amber-500/70 p-6 text-center transition-all group cursor-pointer"
             >
-              <div className="text-3xl mb-3">🎤</div>
-              <p className="text-xs text-amber-400/70 uppercase tracking-wide mb-1">Asistente de voz IA</p>
+              <div className="text-3xl mb-3">📞</div>
+              <p className="text-xs text-white/50 uppercase tracking-wide mb-1">Llámanos</p>
               <p className="font-bold text-amber-400 group-hover:text-amber-300">
                 Hablar con Pedro
               </p>
@@ -521,11 +519,11 @@ export function NightclubLandingPage({ config }: { config: NightclubConfig }) {
                 className="bg-[#0d0d0d] rounded-2xl border border-green-500/30 hover:border-green-500/70 p-6 text-center transition-all group"
               >
                 <div className="text-3xl mb-3">💬</div>
-                <p className="text-xs text-green-400/70 uppercase tracking-wide mb-1">WhatsApp IA</p>
+                <p className="text-xs text-white/50 uppercase tracking-wide mb-1">WhatsApp</p>
                 <p className="font-bold text-green-400 group-hover:text-green-300">
                   Escríbenos
                 </p>
-                <p className="text-xs text-white/40 mt-1">Respuesta automática</p>
+                <p className="text-xs text-white/40 mt-1">Respuesta inmediata</p>
               </a>
             ) : (
               <div className="bg-[#0d0d0d] rounded-2xl border border-white/10 p-6 text-center">

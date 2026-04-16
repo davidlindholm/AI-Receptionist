@@ -70,7 +70,11 @@ export default function AdminPage() {
           </Link>
         </div>
 
-        {/* 🇸🇪 Sweden */}
+        {/* 🇸🇪 Sweden — shown first when SV, second when ES */}
+        {lang === "es" && (
+          <MexicoSection companies={mexicoCompanies} lang={lang} />
+        )}
+
         <section>
           <h2 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-400 mb-3">
             <span className="text-base">🇸🇪</span>
@@ -83,20 +87,34 @@ export default function AdminPage() {
           </div>
         </section>
 
-        {/* 🇲🇽 Mexico */}
-        <section>
-          <h2 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-400 mb-3">
-            <span className="text-base">🇲🇽</span>
-            {t("mexico", lang)} ({mexicoCompanies.length} {t("companies", lang).toLowerCase()})
-          </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {mexicoCompanies.map((company) => (
-              <CompanyCard key={company.slug} company={company} />
-            ))}
-          </div>
-        </section>
+        {/* 🇲🇽 Mexico — shown first when ES, second when SV */}
+        {lang !== "es" && (
+          <MexicoSection companies={mexicoCompanies} lang={lang} />
+        )}
       </main>
     </div>
+  );
+}
+
+function MexicoSection({
+  companies,
+  lang,
+}: {
+  companies: (typeof COMPANIES);
+  lang: Lang;
+}) {
+  return (
+    <section>
+      <h2 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-400 mb-3">
+        <span className="text-base">🇲🇽</span>
+        {t("mexico", lang)} ({companies.length} {t("companies", lang).toLowerCase()})
+      </h2>
+      <div className="grid gap-4 sm:grid-cols-2">
+        {companies.map((company) => (
+          <CompanyCard key={company.slug} company={company} />
+        ))}
+      </div>
+    </section>
   );
 }
 

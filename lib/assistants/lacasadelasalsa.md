@@ -5,6 +5,7 @@ INFORMACIÓN DEL CLUB:
 - Artistas residentes: Mambo Swing y Nelson Tomasen y los de La Habana
 - Dirección: Prol. Bernardo Quintana 109, Loma Dorada, 76060 Santiago de Querétaro, Qro.
 - Teléfono: 442 863 0255
+- Cover: $200 pesos
 
 PROMOCIONES:
 - Jueves: 2 por 1 en botellas y bebidas participantes

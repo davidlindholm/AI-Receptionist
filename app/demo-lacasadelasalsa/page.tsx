@@ -12,7 +12,7 @@ const config: NightclubConfig = {
     address: "Prol. Bernardo Quintana 109, Loma Dorada, 76060 Santiago de Querétaro, Qro.",
     addressShort: "Prol. Bernardo Quintana 109, Loma Dorada, Querétaro",
     mapsUrl: "https://maps.app.goo.gl/5o1rpHrMmVjxbJmM7",
-    whatsappNumber: "+524428630255",
+    whatsappNumber: process.env.WHATSAPP_FROM_NUMBER,
   },
   hero: {
     image: "/salsa/exterior.png",

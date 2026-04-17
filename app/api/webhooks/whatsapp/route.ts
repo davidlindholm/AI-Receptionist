@@ -13,10 +13,10 @@ import { getReply } from "@/lib/whatsapp-bot";
 import { sendWhatsAppMessage } from "@/lib/whatsapp-send";
 
 interface TelnyxWhatsAppPayload {
-  from?: { phone_number?: string };
-  to?: { phone_number?: string }[];
+  from?: { phone_number?: string } | string;
+  to?: { phone_number?: string }[] | string;
   type?: string;
-  text?: { body?: string };
+  text?: { body?: string } | string;
 }
 
 interface TelnyxWebhookBody {
@@ -43,9 +43,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   const payload = body?.data?.payload;
-  const senderPhone = payload?.from?.phone_number;
+  const senderPhone = typeof payload?.from === "string"
+    ? payload.from
+    : payload?.from?.phone_number;
   const messageType = payload?.type;
-  const messageText = payload?.text?.body;
+  const messageText = typeof payload?.text === "string"
+    ? payload.text
+    : payload?.text?.body;
 
   if (!senderPhone) {
     console.warn("[webhook/whatsapp] Missing sender phone in payload");

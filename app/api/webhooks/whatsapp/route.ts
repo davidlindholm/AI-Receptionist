@@ -35,10 +35,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
+  // DEBUG: log full payload to see what Telnyx sends
+  console.log("[webhook/whatsapp] RAW BODY:", JSON.stringify(body));
+
   const eventType = body?.data?.event_type;
 
   // Only handle incoming messages
   if (eventType !== "message.received") {
+    console.log("[webhook/whatsapp] Ignoring event_type:", eventType);
     return NextResponse.json({ received: true }, { status: 200 });
   }
 

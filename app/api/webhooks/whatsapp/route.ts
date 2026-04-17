@@ -52,8 +52,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   const message = body?.data?.payload?.messages?.[0];
   const waId = body?.data?.payload?.contacts?.[0]?.wa_id;
-  // Use wa_id (no + prefix) as Telnyx WhatsApp API expects it for outbound replies
-  const senderPhone = waId ?? message?.from;
+  const rawPhone = waId ?? message?.from ?? "";
+  // Normalize: drop leading +, strip legacy Mexican mobile "1" after "52"
+  // (e.g. 5215591866408 → 525591866408 → +525591866408)
+  const digits = rawPhone.replace(/^\+/, "");
+  const normalized = digits.startsWith("521") && digits.length === 13
+    ? `+52${digits.slice(3)}`
+    : `+${digits}`;
+  const senderPhone = normalized;
   const messageType = message?.type;
   const messageText = message?.text?.body;
 

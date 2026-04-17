@@ -18,8 +18,13 @@ interface TelnyxWhatsAppMessage {
   text?: { body?: string };
 }
 
+interface TelnyxWhatsAppContact {
+  wa_id?: string;
+}
+
 interface TelnyxWhatsAppPayload {
   messages?: TelnyxWhatsAppMessage[];
+  contacts?: TelnyxWhatsAppContact[];
 }
 
 interface TelnyxWebhookBody {
@@ -46,7 +51,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   const message = body?.data?.payload?.messages?.[0];
-  const senderPhone = message?.from;
+  const waId = body?.data?.payload?.contacts?.[0]?.wa_id;
+  // Use wa_id (no + prefix) as Telnyx WhatsApp API expects it for outbound replies
+  const senderPhone = waId ?? message?.from;
   const messageType = message?.type;
   const messageText = message?.text?.body;
 

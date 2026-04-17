@@ -16,6 +16,11 @@ export async function sendWhatsAppMessage(to: string, body: string): Promise<voi
   if (!apiKey) throw new Error("TELNYX_API_KEY is not set");
   if (!from) throw new Error("WHATSAPP_FROM_NUMBER is not set");
 
+  // Debug: log exactly what we're sending so we can diagnose 10004 errors.
+  console.log(
+    `[whatsapp-send] from=${JSON.stringify(from)} len=${from.length} to=${JSON.stringify(to)}`
+  );
+
   const res = await fetch(`${TELNYX_API_BASE}/messages/whatsapp`, {
     method: "POST",
     headers: {

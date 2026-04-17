@@ -9,27 +9,12 @@
 
 const TELNYX_API_BASE = "https://api.telnyx.com/v2";
 
-/**
- * Normalize a phone number to the form WhatsApp/Telnyx expects.
- * Strips the legacy Mexican "1" inserted after country code "52"
- * (e.g. +5215591866408 → +525591866408) since WhatsApp rejects it.
- */
-function normalizeWhatsAppNumber(raw: string): string {
-  const digits = raw.replace(/^\+/, "");
-  if (digits.startsWith("521") && digits.length === 13) {
-    return `+52${digits.slice(3)}`;
-  }
-  return raw.startsWith("+") ? raw : `+${digits}`;
-}
-
 export async function sendWhatsAppMessage(to: string, body: string): Promise<void> {
   const apiKey = process.env.TELNYX_API_KEY;
-  const rawFrom = process.env.WHATSAPP_FROM_NUMBER;
+  const from = process.env.WHATSAPP_FROM_NUMBER;
 
   if (!apiKey) throw new Error("TELNYX_API_KEY is not set");
-  if (!rawFrom) throw new Error("WHATSAPP_FROM_NUMBER is not set");
-
-  const from = normalizeWhatsAppNumber(rawFrom);
+  if (!from) throw new Error("WHATSAPP_FROM_NUMBER is not set");
 
   const res = await fetch(`${TELNYX_API_BASE}/messages/whatsapp`, {
     method: "POST",

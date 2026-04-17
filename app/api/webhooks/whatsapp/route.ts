@@ -58,8 +58,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   console.log(`[webhook/whatsapp] ${messageType} from ${senderPhone}`);
 
-  // Handle non-text messages gracefully
-  if (messageType !== "text" || !messageText) {
+  // Handle non-text messages gracefully (WhatsApp sends type "whatsapp" or "text")
+  if (!messageText) {
     try {
       await sendWhatsAppMessage(
         senderPhone,

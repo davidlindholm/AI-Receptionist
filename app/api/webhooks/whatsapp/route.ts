@@ -12,11 +12,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { getReply } from "@/lib/whatsapp-bot";
 import { sendWhatsAppMessage } from "@/lib/whatsapp-send";
 
-interface TelnyxWhatsAppPayload {
-  from?: { phone_number?: string } | string;
-  to?: { phone_number?: string }[] | string;
+interface TelnyxWhatsAppMessage {
+  from?: string;
   type?: string;
-  text?: { body?: string } | string;
+  text?: { body?: string };
+}
+
+interface TelnyxWhatsAppPayload {
+  messages?: TelnyxWhatsAppMessage[];
 }
 
 interface TelnyxWebhookBody {
@@ -35,25 +38,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  // DEBUG: log full payload to see what Telnyx sends
-  console.log("[webhook/whatsapp] RAW BODY:", JSON.stringify(body));
-
   const eventType = body?.data?.event_type;
 
-  // Only handle incoming messages
-  if (eventType !== "message.received") {
-    console.log("[webhook/whatsapp] Ignoring event_type:", eventType);
+  // Only handle incoming WhatsApp messages
+  if (eventType !== "whatsapp.messages") {
     return NextResponse.json({ received: true }, { status: 200 });
   }
 
-  const payload = body?.data?.payload;
-  const senderPhone = typeof payload?.from === "string"
-    ? payload.from
-    : payload?.from?.phone_number;
-  const messageType = payload?.type;
-  const messageText = typeof payload?.text === "string"
-    ? payload.text
-    : payload?.text?.body;
+  const message = body?.data?.payload?.messages?.[0];
+  const senderPhone = message?.from;
+  const messageType = message?.type;
+  const messageText = message?.text?.body;
 
   if (!senderPhone) {
     console.warn("[webhook/whatsapp] Missing sender phone in payload");

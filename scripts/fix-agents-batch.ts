@@ -132,10 +132,11 @@ async function main() {
     }
 
     // ── Fix 2: Greeting — named assistant, no "unavailable" language ─────
+    const assistantName = company.assistantName ?? (lang === "es" ? "Pedro" : "Martin");
     const newGreeting =
       lang === "es"
-        ? `¡Hola! Has contactado a ${company.name}. Yo soy Laura, ¿en qué puedo ayudarte?`
-        : `Hej! Du har kommit till ${company.name}. Jag är Martin, hur kan jag hjälpa dig?`;
+        ? `¡Hola! Has contactado a ${company.name}. Yo soy ${assistantName}, ¿en qué puedo ayudarte?`
+        : `Hej! Du har kommit till ${company.name}. Jag är ${assistantName}, hur kan jag hjälpa dig?`;
 
     if (current.greeting !== newGreeting) {
       updates.greeting = newGreeting;

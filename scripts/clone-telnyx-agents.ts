@@ -166,9 +166,11 @@ async function updateAssistant(id: string, payload: Record<string, unknown>): Pr
  */
 function buildGreeting(company: Company): string {
   if (company.language === "es") {
-    return `¡Hola! Has contactado a ${company.name}. Yo soy Laura, ¿en qué puedo ayudarte?`;
+    const name = company.assistantName ?? "Pedro";
+    return `¡Hola! Has contactado a ${company.name}. Yo soy ${name}, ¿en qué puedo ayudarte?`;
   }
-  return `Hej! Du har kommit till ${company.name}. Jag är Martin, hur kan jag hjälpa dig?`;
+  const name = company.assistantName ?? "Martin";
+  return `Hej! Du har kommit till ${company.name}. Jag är ${name}, hur kan jag hjälpa dig?`;
 }
 
 // ---------------------------------------------------------------------------

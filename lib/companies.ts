@@ -14,6 +14,7 @@ export interface Company {
   assistantId: string;        // Telnyx AI Assistant id (used to tag inbound calls)
   language?: "sv" | "es";     // Voice/transcription language (default: "sv")
   hasUrgency?: boolean;       // Whether urgency badges apply (default: true, false for nightclubs/estéticas/restaurants)
+  assistantName?: string;     // Override assistant's spoken name (defaults: "Pedro" for es, "Martin" for sv)
 }
 
 export const COMPANIES: Company[] = [
@@ -143,6 +144,7 @@ export const COMPANIES: Company[] = [
     assistantId: "assistant-f51ed302-e020-45c1-8bf7-abc1f0345f9d",
     language: "es",
     hasUrgency: false,
+    assistantName: "Laura",
   },
 ];
 

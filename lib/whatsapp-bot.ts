@@ -69,7 +69,7 @@ export async function getReply(phone: string, incomingText: string): Promise<str
 
   // Call Claude
   const response = await client.messages.create({
-    model: "claude-haiku-4-5",
+    model: "claude-haiku-4-5-20251001",
     max_tokens: 512,
     system: SYSTEM_PROMPT,
     messages: trimmed,

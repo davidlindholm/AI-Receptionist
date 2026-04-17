@@ -320,7 +320,7 @@ export function NightclubLandingPage({ config }: { config: NightclubConfig }) {
               </div>
               <h3 className="text-xl font-bold text-white mb-1">Llámanos</h3>
               <p className="text-white/60 text-sm mb-6">
-                Pedro te atiende al instante. Reserva tu mesa, pregunta por el cover o por los eventos de la semana.
+                Laura te atiende al instante. Reserva tu mesa, pregunta por el cover o por los eventos de la semana.
               </p>
               <GoldButton className="w-full text-base py-3.5" dataAttr>
                 📞 Llamar ahora
@@ -335,7 +335,7 @@ export function NightclubLandingPage({ config }: { config: NightclubConfig }) {
                 </div>
                 <h3 className="text-xl font-bold text-white mb-1">Escríbenos</h3>
                 <p className="text-white/60 text-sm mb-6">
-                  Mándanos un WhatsApp y Pedro te responde de inmediato. Promociones, cover, horarios — lo que necesites.
+                  Mándanos un WhatsApp y Laura te responde de inmediato. Promociones, cover, horarios — lo que necesites.
                 </p>
                 <a
                   href={wa}
@@ -505,7 +505,7 @@ export function NightclubLandingPage({ config }: { config: NightclubConfig }) {
               <div className="text-3xl mb-3">📞</div>
               <p className="text-xs text-white/50 uppercase tracking-wide mb-1">Llámanos</p>
               <p className="font-bold text-amber-400 group-hover:text-amber-300">
-                Hablar con Pedro
+                Hablar con Laura
               </p>
               <p className="text-xs text-white/40 mt-1">Disponible 24/7</p>
             </button>

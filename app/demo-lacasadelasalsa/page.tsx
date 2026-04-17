@@ -92,8 +92,8 @@ const config: NightclubConfig = {
     "/salsa/twoforonejueves.png",
   ],
   aiSection: {
-    title: "Pedro te atiende las 24 horas",
-    body: "Llámanos o escríbenos cuando quieras — incluso mientras suena la orquesta o fuera de horario. Pedro toma reservaciones, informa sobre cover y promociones, y avisa al equipo de inmediato.",
+    title: "Laura te atiende las 24 horas",
+    body: "Llámanos o escríbenos cuando quieras — incluso mientras suena la orquesta o fuera de horario. Laura toma reservaciones, informa sobre cover y promociones, y avisa al equipo de inmediato.",
     bullets: [
       "Te atendemos en español las 24 horas, los 7 días",
       "Reservaciones y consultas de cover",

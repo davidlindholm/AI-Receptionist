@@ -166,7 +166,7 @@ async function updateAssistant(id: string, payload: Record<string, unknown>): Pr
  */
 function buildGreeting(company: Company): string {
   if (company.language === "es") {
-    return `¡Hola! Has contactado a ${company.name}. Yo soy Pedro, ¿en qué puedo ayudarte?`;
+    return `¡Hola! Has contactado a ${company.name}. Yo soy Laura, ¿en qué puedo ayudarte?`;
   }
   return `Hej! Du har kommit till ${company.name}. Jag är Martin, hur kan jag hjälpa dig?`;
 }
@@ -239,8 +239,8 @@ function buildCreatePayload(
     if (payload.voice_settings && typeof payload.voice_settings === "object") {
       payload.voice_settings = {
         ...(payload.voice_settings as Record<string, unknown>),
-        // Pedro - Formal Speaker (es-MX, Male)
-        voice: "Telnyx.Ultra.15d0c2e2-8d29-44c3-be23-d585d5f154a1",
+        // Daniela - Relaxed Woman (es-MX, Female)
+        voice: "Telnyx.Ultra.5c5ad5e7-1020-476b-8b91-fdcbe9cc313c",
         language_boost: "Spanish",
         language: "es-MX",
       };

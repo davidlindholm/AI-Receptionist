@@ -21,7 +21,7 @@ const conversations = new Map<string, Message[]>();
 
 const MAX_HISTORY = 20; // messages to keep per conversation
 
-const SYSTEM_PROMPT = `Eres Pedro, el asistente virtual de La Casa de la Salsa Latin Room.
+const SYSTEM_PROMPT = `Eres Laura, la asistente virtual de La Casa de la Salsa Latin Room.
 
 SOBRE EL CLUB:
 La Casa de la Salsa Latin Room es un club nocturno en Querétaro dedicado a la salsa latina y su cultura. Música en vivo, ambiente vibrante y noches llenas de sabor, ritmo y pasión.

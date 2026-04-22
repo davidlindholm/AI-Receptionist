@@ -13,9 +13,9 @@ const salvadentConfig: BusinessConfig = {
     cityRegion: "Ciudad de México",
   },
   colors: {
-    primary: "#1a2849",
-    accent: "#5dc7b8",
-    accentHover: "#46b3a3",
+    primary: "#1a2340",
+    accent: "#65c0b9",
+    accentHover: "#4fada6",
   },
   hero: {
     image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1920&q=80",

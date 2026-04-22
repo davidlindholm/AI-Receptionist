@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GNS – Growth Network System | Stop losing customers to missed calls & messages</title>
+  <meta name="description" content="GNS automates WhatsApp, calls, and social media for your business. Capture clients 24/7 without hiring more staff. Book a free demo." />
+
+  <!-- Google Fonts: Montserrat (headings) + Open Sans (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'gns-blue':   '#0F3D91',
+            'gns-green':  '#00B67A',
+            'gns-gray':   '#5B6470',
+            'gns-dark':   '#0A0E1A',
+            'gns-card':   '#111827',
+          },
+          fontFamily: {
+            heading: ['Montserrat', 'ui-sans-serif', 'system-ui'],
+            body:    ['Open Sans', 'ui-sans-serif', 'system-ui'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Open Sans', sans-serif; background-color: #000; color: #fff; }
+    h1, h2, h3, h4, .font-heading { font-family: 'Montserrat', sans-serif; }
+
+    /* Subtle fade-in for sections on scroll */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .8s ease-out, transform .8s ease-out; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* WhatsApp pulse animation */
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0 rgba(0,182,122,.7); }
+      70%  { box-shadow: 0 0 0 18px rgba(0,182,122,0); }
+      100% { box-shadow: 0 0 0 0 rgba(0,182,122,0); }
+    }
+    .wa-pulse { animation: pulse-ring 2s infinite; }
+
+    /* Gradient accents */
+    .bg-radial-blue {
+      background: radial-gradient(circle at 20% 20%, rgba(15,61,145,.35) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(0,182,122,.2) 0%, transparent 50%),
+                  #000;
+    }
+
+    /* Chat mockup bubbles */
+    .bubble-in  { border-radius: 18px 18px 18px 4px; }
+    .bubble-out { border-radius: 18px 18px 4px 18px; }
+  </style>
+</head>
+<body class="bg-black text-white antialiased">
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       STICKY NAV
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <nav id="nav" class="fixed top-0 inset-x-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="#hero" class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-gns-blue to-gns-green flex items-center justify-center font-heading font-extrabold text-white">G</div>
+        <span class="font-heading font-extrabold text-lg tracking-tight">GNS</span>
+      </a>
+
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
+        <a href="#problem"  class="hover:text-gns-green transition">Problem</a>
+        <a href="#solution" class="hover:text-gns-green transition">Solution</a>
+        <a href="#how"      class="hover:text-gns-green transition">How it works</a>
+        <a href="#demo"     class="hover:text-gns-green transition">Demo</a>
+        <a href="#pricing"  class="hover:text-gns-green transition">Pricing</a>
+      </div>
+
+      <a href="#book-demo" class="hidden md:inline-flex items-center gap-2 bg-gns-green hover:bg-emerald-500 text-black font-heading font-bold text-sm px-5 py-2.5 rounded-full transition transform hover:scale-105">
+        Book Demo
+      </a>
+
+      <button id="navToggle" aria-label="Toggle menu" class="md:hidden text-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="hidden md:hidden border-t border-white/10 bg-black">
+      <div class="px-4 py-4 flex flex-col gap-4 text-sm font-medium">
+        <a href="#problem"  class="hover:text-gns-green">Problem</a>
+        <a href="#solution" class="hover:text-gns-green">Solution</a>
+        <a href="#how"      class="hover:text-gns-green">How it works</a>
+        <a href="#demo"     class="hover:text-gns-green">Demo</a>
+        <a href="#pricing"  class="hover:text-gns-green">Pricing</a>
+        <a href="#book-demo" class="bg-gns-green text-black font-heading font-bold text-center px-5 py-2.5 rounded-full">Book Demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       1. HERO
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section id="hero" class="bg-radial-blue pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <span class="inline-block text-xs font-heading font-bold tracking-[0.2em] text-gns-green uppercase mb-5">Growth Network System</span>
+        <h1 class="font-heading font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[1.05] tracking-tight">
+          Every missed call or message is
+          <span class="text-gns-green">money you already lost.</span>
+        </h1>
+        <p class="mt-6 text-lg text-gray-300 leading-relaxed max-w-xl">
+          Automate WhatsApp, calls, and social media to capture clients 24/7 — without hiring more staff.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="#book-demo" class="inline-flex items-center justify-center gap-2 bg-gns-green hover:bg-emerald-500 text-black font-heading font-bold px-7 py-4 rounded-full transition transform hover:scale-105 shadow-lg shadow-emerald-500/20">
+            Book Free Demo
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          </a>
+          <a href="#how" class="inline-flex items-center justify-center gap-2 border-2 border-white/20 hover:border-white/40 hover:bg-white/5 text-white font-heading font-bold px-7 py-4 rounded-full transition">
+            See How It Works
+          </a>
+        </div>
+        <div class="mt-8 flex items-center gap-6 text-sm text-gray-400">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-gns-green" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            No setup hassle
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-gns-green" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            Live in days
+          </div>
+        </div>
+      </div>
+
+      <!-- WhatsApp chat mockup -->
+      <div class="relative">
+        <div class="absolute -inset-6 bg-gradient-to-tr from-gns-blue/30 to-gns-green/30 blur-3xl rounded-full"></div>
+        <div class="relative mx-auto max-w-sm bg-[#0b141a] rounded-[2rem] shadow-2xl border border-white/10 overflow-hidden">
+          <!-- Chat header -->
+          <div class="bg-[#202c33] px-4 py-3 flex items-center gap-3 border-b border-black/40">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gns-blue to-gns-green flex items-center justify-center font-heading font-bold text-sm">G</div>
+            <div class="flex-1">
+              <div class="text-sm font-semibold text-white">Your Business (GNS)</div>
+              <div class="text-[11px] text-emerald-400 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> online
+              </div>
+            </div>
+            <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/></svg>
+          </div>
+          <!-- Messages -->
+          <div class="p-4 space-y-3 bg-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect width=%22100%22 height=%22100%22 fill=%22%230b141a%22/></svg>')]">
+            <div class="flex">
+              <div class="bubble-in bg-[#202c33] text-white text-sm px-4 py-2 max-w-[80%] shadow">
+                Hi! Do you have availability tomorrow at 6pm?
+                <div class="text-[10px] text-gray-400 text-right mt-1">8:42 PM</div>
+              </div>
+            </div>
+            <div class="flex justify-end">
+              <div class="bubble-out bg-[#005c4b] text-white text-sm px-4 py-2 max-w-[80%] shadow">
+                Hello! 👋 Yes, 6pm is open. Would you like me to book it for you?
+                <div class="text-[10px] text-emerald-200/70 text-right mt-1">8:42 PM ✓✓</div>
+              </div>
+            </div>
+            <div class="flex">
+              <div class="bubble-in bg-[#202c33] text-white text-sm px-4 py-2 max-w-[80%] shadow">
+                Yes please, under the name Maria.
+                <div class="text-[10px] text-gray-400 text-right mt-1">8:43 PM</div>
+              </div>
+            </div>
+            <div class="flex justify-end">
+              <div class="bubble-out bg-[#005c4b] text-white text-sm px-4 py-2 max-w-[80%] shadow">
+                Booked ✅ See you tomorrow at 6pm, Maria. We'll send a reminder 1h before.
+                <div class="text-[10px] text-emerald-200/70 text-right mt-1">8:43 PM ✓✓</div>
+              </div>
+            </div>
+            <div class="flex justify-center pt-2">
+              <span class="text-[10px] uppercase tracking-wider text-gns-green font-bold bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full">Answered in 3 seconds by GNS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       2. PROBLEM
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section id="problem" class="bg-gns-dark py-20 md:py-28 fade-in">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl leading-tight max-w-3xl mx-auto">
+        It's not a lack of customers. <span class="text-gns-green">It's a lack of follow-up.</span>
+      </h2>
+
+      <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-5 text-left">
+        <!-- Pain 1 -->
+        <div class="bg-gns-card border border-white/5 rounded-2xl p-6 hover:border-gns-green/40 hover:-translate-y-1 transition">
+          <div class="w-12 h-12 rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3 class="font-heading font-bold text-lg mb-2">You reply too late</h3>
+          <p class="text-sm text-gray-400 leading-relaxed">By the time you see the message, they've already booked with someone else.</p>
+        </div>
+        <!-- Pain 2 -->
+        <div class="bg-gns-card border border-white/5 rounded-2xl p-6 hover:border-gns-green/40 hover:-translate-y-1 transition">
+          <div class="w-12 h-12 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          </div>
+          <h3 class="font-heading font-bold text-lg mb-2">You miss calls</h3>
+          <p class="text-sm text-gray-400 leading-relaxed">Every unanswered call is a customer walking straight to your competitor.</p>
+        </div>
+        <!-- Pain 3 -->
+        <div class="bg-gns-card border border-white/5 rounded-2xl p-6 hover:border-gns-green/40 hover:-translate-y-1 transition">
+          <div class="w-12 h-12 rounded-xl bg-yellow-500/10 text-yellow-400 flex items-center justify-center mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          </div>
+          <h3 class="font-heading font-bold text-lg mb-2">You forget to follow up</h3>
+          <p class="text-sm text-gray-400 leading-relaxed">Leads go cold because "I'll get back to them later" turns into never.</p>
+        </div>
+        <!-- Pain 4 -->
+        <div class="bg-gns-card border border-white/5 rounded-2xl p-6 hover:border-gns-green/40 hover:-translate-y-1 transition">
+          <div class="w-12 h-12 rounded-xl bg-pink-500/10 text-pink-400 flex items-center justify-center mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
+          </div>
+          <h3 class="font-heading font-bold text-lg mb-2">You lose customers without noticing</h3>
+          <p class="text-sm text-gray-400 leading-relaxed">Silent churn — they simply stopped coming, and you never found out why.</p>
+        </div>
+      </div>
+
+      <p class="mt-14 font-heading font-bold text-xl sm:text-2xl text-white">
+        This is costing you money <span class="text-gns-green">every single day.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       3. STORY
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="bg-black py-20 md:py-28 fade-in">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="relative bg-gradient-to-br from-gns-blue/20 to-gns-card border border-white/10 rounded-3xl p-8 md:p-14">
+        <span class="absolute -top-8 left-8 font-heading font-extrabold text-gns-green text-[8rem] leading-none select-none opacity-30">"</span>
+        <div class="relative space-y-5 text-lg text-gray-300 leading-relaxed">
+          <p><strong class="text-white">Friday, 8:47 PM.</strong> Someone sees your business on Instagram and sends a message: <em>"Do you have availability this weekend?"</em></p>
+          <p>You're with your family. You'll reply later.</p>
+          <p>Fifteen minutes later, they message your competitor. The competitor replies in 2 minutes. Appointment booked.</p>
+          <p>Saturday morning you open your phone, see the message, and type <em>"Good morning! Yes, we have..."</em> — but it's already too late.</p>
+          <p class="text-white font-semibold">That customer was yours. You just didn't know it in time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       4. SOLUTION
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section id="solution" class="bg-gns-dark py-20 md:py-28 fade-in">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto">
+        <span class="inline-block text-xs font-heading font-bold tracking-[0.2em] text-gns-green uppercase mb-4">The solution</span>
+        <h2 class="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl leading-tight">
+          GNS – Your AI <span class="text-gns-green">Customer Growth Engine</span>
+        </h2>
+        <p class="mt-5 text-gray-400 text-lg">One system that replies, books, and follows up — across every channel, all the time.</p>
+      </div>
+
+      <div class="mt-14 grid md:grid-cols-2 gap-5">
+        <!-- Feature 1 -->
+        <div class="flex gap-5 bg-gns-card border border-white/5 rounded-2xl p-6 hover:border-gns-green/40 transition">
+          <div class="flex-shrink-0 w-14 h-14 rounded-xl bg-emerald-500/10 text-gns-green flex items-center justify-center">
+            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-xl mb-2">Automatic WhatsApp replies</h3>
+            <p class="text-gray-400 leading-relaxed">Every message answered in seconds — with your tone, your info, your offers. Day or night.</p>
+          </div>
+        </div>
+        <!-- Feature 2 -->
+        <div class="flex gap-5 bg-gns-card border border-white/5 rounded-2xl p-6 hover:border-gns-green/40 transition">
+          <div class="flex-shrink-0 w-14 h-14 rounded-xl bg-blue-500/10 text-gns-blue flex items-center justify-center" style="color:#60a5fa">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-xl mb-2">Answers phone calls 24/7</h3>
+            <p class="text-gray-400 leading-relaxed">A natural-sounding AI receptionist picks up every call — no more voicemail, no more lost leads.</p>
+          </div>
+        </div>
+        <!-- Feature 3 -->
+        <div class="flex gap-5 bg-gns-card border border-white/5 rounded-2xl p-6 hover:border-gns-green/40 transition">
+          <div class="flex-shrink-0 w-14 h-14 rounded-xl bg-purple-500/10 flex items-center justify-center" style="color:#c084fc">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-xl mb-2">Books appointments automatically</h3>
+            <p class="text-gray-400 leading-relaxed">Syncs with your calendar, checks availability, and confirms bookings — zero manual work.</p>
+          </div>
+        </div>
+        <!-- Feature 4 -->
+        <div class="flex gap-5 bg-gns-card border border-white/5 rounded-2xl p-6 hover:border-gns-green/40 transition">
+          <div class="flex-shrink-0 w-14 h-14 rounded-xl bg-emerald-500/10 text-gns-green flex items-center justify-center">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-xl mb-2">Follows up with every lead</h3>
+            <p class="text-gray-400 leading-relaxed">Automatic reminders, re-engagement messages, and post-visit check-ins — leads never fall through.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       5. HOW IT WORKS
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section id="how" class="bg-black py-20 md:py-28 fade-in">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto">
+        <span class="inline-block text-xs font-heading font-bold tracking-[0.2em] text-gns-green uppercase mb-4">How it works</span>
+        <h2 class="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl leading-tight">From zero to capturing customers in 3 steps</h2>
+      </div>
+
+      <div class="mt-16 grid md:grid-cols-3 gap-8 relative">
+        <!-- Connecting line (desktop) -->
+        <div class="hidden md:block absolute top-10 left-[16%] right-[16%] h-px bg-gradient-to-r from-gns-blue via-gns-green to-gns-blue opacity-30"></div>
+
+        <!-- Step 1 -->
+        <div class="relative text-center">
+          <div class="relative w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-gns-blue to-gns-green flex items-center justify-center font-heading font-extrabold text-3xl text-white shadow-lg shadow-emerald-500/20">1</div>
+          <h3 class="font-heading font-bold text-xl mt-6 mb-3">Connect your channels</h3>
+          <p class="text-gray-400 leading-relaxed">Plug in WhatsApp, your phone number, and your social media — in minutes, no tech skills needed.</p>
+        </div>
+        <!-- Step 2 -->
+        <div class="relative text-center">
+          <div class="relative w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-gns-blue to-gns-green flex items-center justify-center font-heading font-extrabold text-3xl text-white shadow-lg shadow-emerald-500/20">2</div>
+          <h3 class="font-heading font-bold text-xl mt-6 mb-3">Train the AI with your business</h3>
+          <p class="text-gray-400 leading-relaxed">Tell it your services, prices, hours, and tone. It learns exactly how to represent your brand.</p>
+        </div>
+        <!-- Step 3 -->
+        <div class="relative text-center">
+          <div class="relative w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-gns-blue to-gns-green flex items-center justify-center font-heading font-extrabold text-3xl text-white shadow-lg shadow-emerald-500/20">3</div>
+          <h3 class="font-heading font-bold text-xl mt-6 mb-3">Start capturing customers</h3>
+          <p class="text-gray-400 leading-relaxed">The AI replies, books, and follows up automatically — you just watch your calendar fill up.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       6. WHO IS THIS FOR
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="bg-gns-dark py-20 md:py-28 fade-in">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto">
+        <span class="inline-block text-xs font-heading font-bold tracking-[0.2em] text-gns-green uppercase mb-4">Built for</span>
+        <h2 class="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl leading-tight">Businesses that live on messages & calls</h2>
+      </div>
+
+      <div class="mt-14 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <!-- Restaurants -->
+        <div class="bg-gns-card border border-white/5 rounded-2xl p-6 text-center hover:border-gns-green/40 hover:-translate-y-1 transition">
+          <div class="w-14 h-14 mx-auto rounded-xl bg-gns-green/10 text-gns-green flex items-center justify-center mb-4">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          </div>
+          <div class="font-heading font-bold">Restaurants</div>
+        </div>
+        <!-- Beauty salons -->
+        <div class="bg-gns-card border border-white/5 rounded-2xl p-6 text-center hover:border-gns-green/40 hover:-translate-y-1 transition">
+          <div class="w-14 h-14 mx-auto rounded-xl bg-gns-green/10 text-gns-green flex items-center justify-center mb-4">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15a3 3 0 100-6 3 3 0 000 6zm9-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div class="font-heading font-bold">Beauty salons</div>
+        </div>
+        <!-- Clinics -->
+        <div class="bg-gns-card border border-white/5 rounded-2xl p-6 text-center hover:border-gns-green/40 hover:-translate-y-1 transition">
+          <div class="w-14 h-14 mx-auto rounded-xl bg-gns-green/10 text-gns-green flex items-center justify-center mb-4">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </div>
+          <div class="font-heading font-bold">Clinics</div>
+        </div>
+        <!-- Nightclubs -->
+        <div class="bg-gns-card border border-white/5 rounded-2xl p-6 text-center hover:border-gns-green/40 hover:-translate-y-1 transition">
+          <div class="w-14 h-14 mx-auto rounded-xl bg-gns-green/10 text-gns-green flex items-center justify-center mb-4">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+          </div>
+          <div class="font-heading font-bold">Nightclubs</div>
+        </div>
+        <!-- Service businesses -->
+        <div class="bg-gns-card border border-white/5 rounded-2xl p-6 text-center hover:border-gns-green/40 hover:-translate-y-1 transition">
+          <div class="w-14 h-14 mx-auto rounded-xl bg-gns-green/10 text-gns-green flex items-center justify-center mb-4">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <div class="font-heading font-bold">Service businesses</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       7. DEMO
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section id="demo" class="bg-black py-20 md:py-28 fade-in">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto">
+        <span class="inline-block text-xs font-heading font-bold tracking-[0.2em] text-gns-green uppercase mb-4">Live demos</span>
+        <h2 class="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl leading-tight">See it in action</h2>
+        <p class="mt-5 text-gray-400 text-lg">Real interactions. Real results. See how GNS handles your customers.</p>
+      </div>
+
+      <div class="mt-14 grid md:grid-cols-3 gap-6">
+        <!-- WhatsApp demo -->
+        <div class="group bg-gns-card border border-white/5 rounded-2xl p-8 hover:border-gns-green/40 transition">
+          <div class="aspect-video rounded-xl bg-gradient-to-br from-emerald-900/40 to-emerald-700/20 border border-emerald-500/20 flex items-center justify-center mb-6 relative overflow-hidden">
+            <svg class="w-16 h-16 text-gns-green opacity-80" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </div>
+          <h3 class="font-heading font-bold text-xl mb-2">WhatsApp demo</h3>
+          <p class="text-gray-400 text-sm mb-5">Watch GNS answer a customer, handle objections, and close the booking — live.</p>
+          <!-- TODO: Link to actual WhatsApp demo video/flow -->
+          <a href="#" class="inline-flex items-center gap-2 text-gns-green font-heading font-bold hover:gap-3 transition-all">
+            View Demo
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </div>
+        <!-- Call demo -->
+        <div class="group bg-gns-card border border-white/5 rounded-2xl p-8 hover:border-gns-green/40 transition">
+          <div class="aspect-video rounded-xl bg-gradient-to-br from-blue-900/40 to-blue-700/20 border border-blue-500/20 flex items-center justify-center mb-6">
+            <svg class="w-16 h-16 text-blue-400 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M12 6a4 4 0 00-4 4v4a4 4 0 008 0v-4a4 4 0 00-4-4z"/></svg>
+          </div>
+          <h3 class="font-heading font-bold text-xl mb-2">Call demo</h3>
+          <p class="text-gray-400 text-sm mb-5">Hear a natural-sounding AI conversation — picking up a call and booking an appointment.</p>
+          <!-- TODO: Link to actual call demo audio -->
+          <a href="#" class="inline-flex items-center gap-2 text-gns-green font-heading font-bold hover:gap-3 transition-all">
+            Listen Demo
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </div>
+        <!-- Omnichannel demo -->
+        <div class="group bg-gns-card border border-white/5 rounded-2xl p-8 hover:border-gns-green/40 transition">
+          <div class="aspect-video rounded-xl bg-gradient-to-br from-purple-900/40 to-purple-700/20 border border-purple-500/20 flex items-center justify-center mb-6">
+            <svg class="w-16 h-16 text-purple-400 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          </div>
+          <h3 class="font-heading font-bold text-xl mb-2">Omnichannel demo</h3>
+          <p class="text-gray-400 text-sm mb-5">See the full flow: WhatsApp + calls + Instagram + follow-ups — one unified conversation.</p>
+          <!-- TODO: Link to actual omnichannel flow demo -->
+          <a href="#" class="inline-flex items-center gap-2 text-gns-green font-heading font-bold hover:gap-3 transition-all">
+            View Flow
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       8. RESULTS
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="bg-gns-dark py-20 md:py-28 fade-in">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto">
+        <span class="inline-block text-xs font-heading font-bold tracking-[0.2em] text-gns-green uppercase mb-4">Real results</span>
+        <h2 class="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl leading-tight">Businesses like yours are getting:</h2>
+      </div>
+
+      <div class="mt-14 grid md:grid-cols-3 gap-6">
+        <div class="bg-gradient-to-br from-gns-blue/20 to-gns-card border border-white/10 rounded-2xl p-8 text-center hover:border-gns-green/40 transition">
+          <div class="font-heading font-extrabold text-5xl sm:text-6xl text-gns-green">+</div>
+          <div class="font-heading font-bold text-xl mt-3">More appointments</div>
+          <p class="text-gray-400 text-sm mt-3">Every inquiry gets answered and booked — no more lost opportunities.</p>
+        </div>
+        <div class="bg-gradient-to-br from-gns-blue/20 to-gns-card border border-white/10 rounded-2xl p-8 text-center hover:border-gns-green/40 transition">
+          <div class="font-heading font-extrabold text-5xl sm:text-6xl text-gns-green">0</div>
+          <div class="font-heading font-bold text-xl mt-3">Missed leads</div>
+          <p class="text-gray-400 text-sm mt-3">Every call answered. Every message replied. Every follow-up sent.</p>
+        </div>
+        <div class="bg-gradient-to-br from-gns-blue/20 to-gns-card border border-white/10 rounded-2xl p-8 text-center hover:border-gns-green/40 transition">
+          <div class="font-heading font-extrabold text-5xl sm:text-6xl text-gns-green">$</div>
+          <div class="font-heading font-bold text-xl mt-3">More revenue</div>
+          <p class="text-gray-400 text-sm mt-3">Capture customers you were already losing — same marketing, more sales.</p>
+        </div>
+      </div>
+
+      <div class="mt-12 text-center max-w-3xl mx-auto">
+        <p class="font-heading font-bold text-xl sm:text-2xl text-white">
+          Just <span class="text-gns-green">1–3 extra customers per week</span> can pay for the entire service.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       9. GUARANTEE
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="bg-black py-20 md:py-28 fade-in">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="relative bg-gradient-to-br from-gns-green/10 to-gns-blue/10 border border-gns-green/30 rounded-3xl p-10 md:p-14 text-center">
+        <div class="w-20 h-20 mx-auto rounded-full bg-gns-green/20 border border-gns-green/40 flex items-center justify-center mb-6">
+          <svg class="w-10 h-10 text-gns-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <h2 class="font-heading font-extrabold text-3xl sm:text-4xl leading-tight">If you don't use it, it doesn't make sense.</h2>
+        <p class="mt-5 text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
+          If you're not actively using the system within 30 days, we help you implement it — or you can cancel. No lock-in, no penalties. Our success depends on yours.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       10. PRICING
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section id="pricing" class="bg-gns-dark py-20 md:py-28 fade-in">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="inline-block text-xs font-heading font-bold tracking-[0.2em] text-gns-green uppercase mb-4">Simple pricing</span>
+        <h2 class="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl leading-tight">One price. Everything included.</h2>
+      </div>
+
+      <div class="bg-gradient-to-br from-gns-card to-black border border-gns-green/30 rounded-3xl p-10 md:p-12 text-center shadow-2xl shadow-emerald-500/10">
+        <div class="text-sm font-heading font-bold tracking-wider text-gns-green uppercase mb-3">Plans starting from</div>
+        <div class="font-heading font-extrabold text-5xl sm:text-6xl lg:text-7xl text-white">
+          $2,999 <span class="text-2xl sm:text-3xl text-gray-400 font-bold">MXN/month</span>
+        </div>
+        <p class="mt-4 text-gray-400">Everything you need to stop losing customers — nothing you don't.</p>
+
+        <ul class="mt-8 grid sm:grid-cols-2 gap-3 text-left max-w-xl mx-auto">
+          <li class="flex items-start gap-3 text-gray-300">
+            <svg class="w-5 h-5 text-gns-green flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            WhatsApp automation
+          </li>
+          <li class="flex items-start gap-3 text-gray-300">
+            <svg class="w-5 h-5 text-gns-green flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            24/7 AI phone receptionist
+          </li>
+          <li class="flex items-start gap-3 text-gray-300">
+            <svg class="w-5 h-5 text-gns-green flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            Automatic booking & calendar sync
+          </li>
+          <li class="flex items-start gap-3 text-gray-300">
+            <svg class="w-5 h-5 text-gns-green flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            Automated lead follow-up
+          </li>
+          <li class="flex items-start gap-3 text-gray-300">
+            <svg class="w-5 h-5 text-gns-green flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            Setup & onboarding
+          </li>
+          <li class="flex items-start gap-3 text-gray-300">
+            <svg class="w-5 h-5 text-gns-green flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            Ongoing support
+          </li>
+        </ul>
+
+        <a href="#book-demo" class="mt-10 inline-flex items-center justify-center gap-2 bg-gns-green hover:bg-emerald-500 text-black font-heading font-bold px-8 py-4 rounded-full transition transform hover:scale-105 shadow-lg shadow-emerald-500/20">
+          Book Demo
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       11. FINAL CTA + FORM
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section id="book-demo" class="bg-black py-20 md:py-28 fade-in">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 items-center bg-gradient-to-br from-gns-blue/20 via-black to-gns-green/10 border border-white/10 rounded-3xl p-10 md:p-14">
+        <div>
+          <h2 class="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl leading-[1.05]">
+            Stop losing customers <span class="text-gns-green">today.</span>
+          </h2>
+          <p class="mt-5 text-lg text-gray-300 leading-relaxed">
+            Book your free demo. See exactly how GNS would work for your business — in 20 minutes, no strings attached.
+          </p>
+          <div class="mt-6 space-y-2 text-sm text-gray-400">
+            <div class="flex items-center gap-2"><svg class="w-5 h-5 text-gns-green" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Personalized for your business</div>
+            <div class="flex items-center gap-2"><svg class="w-5 h-5 text-gns-green" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> No commitment</div>
+            <div class="flex items-center gap-2"><svg class="w-5 h-5 text-gns-green" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Live in days, not months</div>
+          </div>
+        </div>
+
+        <form id="leadForm" class="bg-black/60 border border-white/10 rounded-2xl p-6 md:p-8 space-y-4">
+          <div>
+            <label class="block text-xs font-heading font-bold tracking-wider text-gray-400 uppercase mb-2">Name</label>
+            <input type="text" name="name" required placeholder="Your full name"
+              class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-gns-green focus:bg-white/10 transition" />
+          </div>
+          <div>
+            <label class="block text-xs font-heading font-bold tracking-wider text-gray-400 uppercase mb-2">Phone / WhatsApp</label>
+            <input type="tel" name="phone" required placeholder="+52 55 1234 5678"
+              class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-gns-green focus:bg-white/10 transition" />
+          </div>
+          <div>
+            <label class="block text-xs font-heading font-bold tracking-wider text-gray-400 uppercase mb-2">Business type</label>
+            <select name="businessType" required
+              class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gns-green focus:bg-white/10 transition">
+              <option value="" class="bg-black">Select…</option>
+              <option value="restaurant" class="bg-black">Restaurant</option>
+              <option value="salon"      class="bg-black">Beauty salon</option>
+              <option value="clinic"     class="bg-black">Clinic</option>
+              <option value="nightclub"  class="bg-black">Nightclub</option>
+              <option value="service"    class="bg-black">Service business</option>
+              <option value="other"      class="bg-black">Other</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-heading font-bold tracking-wider text-gray-400 uppercase mb-2">City</label>
+            <input type="text" name="city" required placeholder="City of Mexico, Guadalajara…"
+              class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-gns-green focus:bg-white/10 transition" />
+          </div>
+
+          <button type="submit" class="w-full bg-gns-green hover:bg-emerald-500 text-black font-heading font-bold px-6 py-4 rounded-full transition transform hover:scale-[1.02] shadow-lg shadow-emerald-500/20">
+            Book Your Free Demo Now
+          </button>
+
+          <p id="formStatus" class="hidden text-center text-sm text-gns-green font-semibold pt-2">
+            ✓ Thanks — we'll be in touch shortly.
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <footer class="bg-black border-t border-white/10 py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-gns-blue to-gns-green flex items-center justify-center font-heading font-extrabold text-white text-sm">G</div>
+        <span class="font-heading font-bold text-white">GNS</span>
+        <span>— Growth Network System</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="#problem"  class="hover:text-white transition">Problem</a>
+        <a href="#solution" class="hover:text-white transition">Solution</a>
+        <a href="#pricing"  class="hover:text-white transition">Pricing</a>
+      </div>
+      <div>© 2026 GNS. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       FLOATING WHATSAPP BUTTON (number from .env.local WHATSAPP_FROM_NUMBER)
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <a href="https://wa.me/5215561150871?text=Hola%2C%20quiero%20agendar%20una%20demo%20de%20GNS"
+     target="_blank" rel="noopener"
+     aria-label="Chat on WhatsApp"
+     class="wa-pulse fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gns-green hover:bg-emerald-500 flex items-center justify-center shadow-xl transition transform hover:scale-110">
+    <svg class="w-7 h-7 text-black" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SCRIPTS
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <script>
+    // Mobile menu toggle
+    const navToggle  = document.getElementById('navToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    navToggle?.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+    // Close mobile menu after clicking a link
+    mobileMenu?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+    // Fade-in on scroll (IntersectionObserver)
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+    // Form submit (placeholder — logs to console)
+    const form       = document.getElementById('leadForm');
+    const formStatus = document.getElementById('formStatus');
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+      // TODO: Replace with real endpoint (webhook / Supabase / email).
+      console.log('[GNS lead]', data);
+      formStatus.classList.remove('hidden');
+      form.reset();
+    });
+  </script>
+</body>
+</html>

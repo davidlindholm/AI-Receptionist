@@ -18,7 +18,7 @@ const salvadentConfig: BusinessConfig = {
     accentHover: "#46b3a3",
   },
   hero: {
-    image: "https://picsum.photos/seed/salvadent-hero/1920/1080",
+    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1920&q=80",
     eyebrow: "Salvadent A.C.",
     title: "Prevención que cuida tu vida",
     body: "Asociación civil mexicana dedicada a fomentar la cultura de la prevención. Atención médica integral, odontología, rehabilitación y programas de salud a costos accesibles, con un equipo multidisciplinario comprometido contigo.",
@@ -43,32 +43,32 @@ const salvadentConfig: BusinessConfig = {
     sectionSubtitle: "Atención integral para ti y tu familia",
     items: [
       {
-        img: "https://picsum.photos/seed/salvadent-s1/800/600",
+        img: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=800&h=600&fit=crop&q=80",
         title: "Medicina general y de especialidad",
         desc: "Consultas con médicos certificados para diagnóstico, tratamiento y seguimiento — desde la atención cotidiana hasta especialidades.",
       },
       {
-        img: "https://picsum.photos/seed/salvadent-s2/800/600",
+        img: "https://images.unsplash.com/photo-1629909615184-73e5e933c6f1?w=800&h=600&fit=crop&q=80",
         title: "Odontología integral",
         desc: "Programa Recupera tu Sonrisa — atendemos caries, gingivitis, periodontitis, halitosis y más, con enfoque preventivo y restaurador.",
       },
       {
-        img: "https://picsum.photos/seed/salvadent-s3/800/600",
+        img: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop&q=80",
         title: "Rehabilitación física",
         desc: "Intervenciones encaminadas a optimizar tu funcionamiento físico y reducir cualquier afección o discapacidad que limite tu día a día.",
       },
       {
-        img: "https://picsum.photos/seed/salvadent-s4/800/600",
+        img: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&h=600&fit=crop&q=80",
         title: "Terapias alternativas y homeopatía",
         desc: "Complementa tu salud con tratamientos que reducen el estrés, alivian infecciones y apoyan enfermedades crónico-degenerativas.",
       },
       {
-        img: "https://picsum.photos/seed/salvadent-s5/800/600",
+        img: "https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=800&h=600&fit=crop&q=80",
         title: "Laboratorio y gabinete",
         desc: "Estudios diagnósticos para detección oportuna — porque atender a tiempo brinda mayor eficacia en cualquier tratamiento.",
       },
       {
-        img: "https://picsum.photos/seed/salvadent-s6/800/600",
+        img: "https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&h=600&fit=crop&q=80",
         title: "Salvacard — Membresía",
         desc: "Reduce los costos de tus servicios médicos. Tres modalidades: Individual, PLUS Familiar y COLLECT Empresarial.",
       },
@@ -86,7 +86,7 @@ const salvadentConfig: BusinessConfig = {
       "Detección oportuna de enfermedades",
       "Atención cálida y centrada en la persona",
     ],
-    teamImage: "https://picsum.photos/seed/salvadent-team/1200/720",
+    teamImage: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=720&fit=crop&q=80",
     quote: "Lograr una vida plena no debería ser un lujo, sino una posibilidad para todos.",
     ownerName: "Equipo Salvadent",
     ownerTitle: "Asociación Civil",

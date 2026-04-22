@@ -199,6 +199,27 @@ async function main() {
       console.log(`  [webhook] ✓ already correct`);
     }
 
+    // ── Fix 6: interruption_settings (wait_seconds = 3) ─────────────
+    const is = current.interruption_settings as Record<string, unknown> | undefined;
+    const ssp = is?.start_speaking_plan as Record<string, unknown> | undefined;
+    const currentWait = ssp?.wait_seconds as number | undefined;
+    if (currentWait !== 3) {
+      updates.interruption_settings = {
+        enable: true,
+        start_speaking_plan: {
+          wait_seconds: 3,
+          transcription_endpointing_plan: {
+            on_punctuation_seconds: 0.1,
+            on_no_punctuation_seconds: 0.1,
+            on_number_seconds: 0.1,
+          },
+        },
+      };
+      console.log(`  [interruption] wait_seconds: ${currentWait ?? "unset"} → 3`);
+    } else {
+      console.log(`  [interruption] ✓ wait_seconds already 3`);
+    }
+
     // ── Apply updates ────────────────────────────────────────────────
     if (Object.keys(updates).length > 0) {
       try {
@@ -236,10 +257,15 @@ async function main() {
     const hasWebhook = a.webhook_url === expectedWH;
 
     const lang = company.language ?? "sv";
+    const verifyIS = a.interruption_settings as Record<string, unknown> | undefined;
+    const verifySSP = verifyIS?.start_speaking_plan as Record<string, unknown> | undefined;
+    const verifyWait = verifySSP?.wait_seconds as number | undefined;
+
     const checks = [
       hasHangup ? "✓hangup" : "✗hangup",
       endsWithQuestion ? "✓greeting" : "✗greeting",
       hasWebhook ? "✓webhook" : "✗webhook",
+      verifyWait === 3 ? "✓wait3s" : `✗wait${verifyWait ?? "?"}s`,
     ];
     if (lang === "es") {
       checks.push(

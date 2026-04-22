@@ -183,13 +183,13 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
           {/* Links */}
           <div className="hidden md:flex items-center gap-8 text-[15px] font-semibold text-[#2b2e33]">
             <a href="#" style={{ color: colors.primary }}>{t("home", lang)}</a>
-            <a href="#om-oss" className="transition-colors"
+            <a href="#about" className="transition-colors"
               onMouseEnter={(e) => (e.currentTarget.style.color = colors.primary)}
               onMouseLeave={(e) => (e.currentTarget.style.color = "")}>{t("aboutUs", lang)}</a>
-            <a href="#tjanster" className="transition-colors"
+            <a href="#services" className="transition-colors"
               onMouseEnter={(e) => (e.currentTarget.style.color = colors.primary)}
               onMouseLeave={(e) => (e.currentTarget.style.color = "")}>{t("services", lang)}</a>
-            <a href="#kontakt" className="transition-colors"
+            <a href="#contact" className="transition-colors"
               onMouseEnter={(e) => (e.currentTarget.style.color = colors.primary)}
               onMouseLeave={(e) => (e.currentTarget.style.color = "")}>{t("contact", lang)}</a>
           </div>
@@ -235,7 +235,7 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
       </section>
 
       {/* ── About two-col ──────────────────────────────────────────────────── */}
-      <section id="om-oss" className="bg-white py-16 border-b border-[#edf0f7]">
+      <section id="about" className="bg-white py-16 border-b border-[#edf0f7]">
         <div className="mx-auto max-w-6xl px-6 grid md:grid-cols-2 gap-12">
           <div>
             <h2 className="text-2xl font-bold text-[#2b2e33] mb-4">{about.leftTitle}</h2>
@@ -253,7 +253,7 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
       </section>
 
       {/* ── Services ───────────────────────────────────────────────────────── */}
-      <section id="tjanster" className="bg-white py-16">
+      <section id="services" className="bg-white py-16">
         <div className="mx-auto max-w-6xl px-6">
 
           <h2 className="text-3xl font-bold text-[#2b2e33] mb-2">{services.sectionTitle}</h2>
@@ -342,7 +342,7 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
       </section>
 
       {/* ── Quote form ─────────────────────────────────────────────────────── */}
-      <section id="offert" className="bg-white py-16">
+      <section id="quote" className="bg-white py-16">
         <div className="mx-auto max-w-5xl px-6">
           <h2 className="text-3xl font-bold text-[#2b2e33] mb-2">{t("requestQuote", lang)}</h2>
           <p className="text-[#2b2e33]/50 text-[17px] mb-10">
@@ -521,7 +521,7 @@ export function BusinessLandingPage({ config }: { config: BusinessConfig }) {
       </section>
 
       {/* ── Contact ────────────────────────────────────────────────────────── */}
-      <section id="kontakt" className="bg-[#edf0f7] py-16">
+      <section id="contact" className="bg-[#edf0f7] py-16">
         <div className="mx-auto max-w-6xl px-6">
           <h2 className="text-3xl font-bold text-[#2b2e33] mb-2">{t("contactTitle", lang)}</h2>
           <p className="text-[#2b2e33]/50 text-[17px] mb-10">{t("contactSub", lang)}</p>

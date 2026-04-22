@@ -72,6 +72,8 @@ export interface ExtractionOptions {
   companyServiceType?: string | null;
   /** If false, urgency is always "normal" (e.g. nightclubs, restaurants) */
   hasUrgency?: boolean;
+  /** Company language — "es" skips Swedish/English patterns to avoid false matches */
+  language?: string | null;
 }
 
 export function extractLeadFromTranscript(
@@ -92,9 +94,12 @@ export function extractLeadFromTranscript(
         ? "urgent"
         : "normal";
 
-  // Service type
+  // Service type — for Spanish companies, only test the Spanish patterns (last 3 entries)
+  // to avoid false matches on Swedish/English patterns (e.g. /el\b/ matching "El cliente")
+  const patterns =
+    options.language === "es" ? SERVICE_TYPE_MAP.slice(-3) : SERVICE_TYPE_MAP;
   let service_type: string | null = null;
-  for (const [pattern, label] of SERVICE_TYPE_MAP) {
+  for (const [pattern, label] of patterns) {
     if (pattern.test(transcript)) {
       service_type = label;
       break;

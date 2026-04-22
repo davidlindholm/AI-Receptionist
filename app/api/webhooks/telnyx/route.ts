@@ -97,6 +97,7 @@ export async function POST(req: NextRequest) {
       const extracted = extractLeadFromTranscript(transcript ?? "", {
         companyServiceType: company?.serviceType,
         hasUrgency: company?.hasUrgency,
+        language: company?.language,
       });
 
       // Try to finalise an in-progress call first (Call Control flow).

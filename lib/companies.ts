@@ -146,6 +146,20 @@ export const COMPANIES: Company[] = [
     hasUrgency: false,
     assistantName: "Laura",
   },
+  {
+    slug: "salvadent",
+    name: "Salvadent A.C.",
+    industry: "Salud / Prevención",
+    serviceType: "Salud",
+    demoPath: "/demo-salvadent",
+    primaryColor: "#1a2849",
+    accentColor: "#5dc7b8",
+    description: "Asociación civil de prevención en salud — medicina general, odontología, rehabilitación y Salvacard",
+    assistantId: "assistant-34f56af0-59af-4cf9-9e3e-22824fa3d033",
+    language: "es",
+    hasUrgency: true,
+    assistantName: "Sofía",
+  },
 ];
 
 export function getCompany(slug: string): Company | undefined {

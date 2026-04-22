@@ -48,7 +48,7 @@ const salvadentConfig: BusinessConfig = {
         desc: "Consultas con médicos certificados para diagnóstico, tratamiento y seguimiento — desde la atención cotidiana hasta especialidades.",
       },
       {
-        img: "https://images.unsplash.com/photo-1629909615184-73e5e933c6f1?w=800&h=600&fit=crop&q=80",
+        img: "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=800&h=600&fit=crop&q=80",
         title: "Odontología integral",
         desc: "Programa Recupera tu Sonrisa — atendemos caries, gingivitis, periodontitis, halitosis y más, con enfoque preventivo y restaurador.",
       },

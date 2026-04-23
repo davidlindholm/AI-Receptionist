@@ -55,7 +55,9 @@ const SERVICE_TYPE_MAP: [RegExp, string][] = [
   // Spanish industries
   [/club\s*nocturno|discoteca|antro|salsa|noche|cover|pista/i, "Club nocturno"],
   [/reserv(?:a|aci[oó]n)|mesa|restaurante|comida|cena|almuerzo/i, "Restaurante"],
-  [/cita|tratamiento|facial|corporal|u[ñn]as|depilaci[oó]n|maquillaje|est[eé]tica|belleza/i, "Estética"],
+  [/dental|dentista|odontolog|diente|muela|caries|limpieza\s*dental|encía|gingivit|periodontit|ortodon|endodon|blanqueamiento|sonrisa/i, "Odontología"],
+  [/medicina|m[eé]dico|consulta|rehabilitaci[oó]n|homeopat|laboratorio|salvacard|salud|prevenci[oó]n|fisioterapia/i, "Salud"],
+  [/tratamiento|facial|corporal|u[ñn]as|depilaci[oó]n|maquillaje|est[eé]tica|belleza/i, "Estética"],
 ];
 
 // Simple name extraction: require actual capital first letter so connective words ("och", "att") are excluded.
@@ -94,10 +96,10 @@ export function extractLeadFromTranscript(
         ? "urgent"
         : "normal";
 
-  // Service type — for Spanish companies, only test the Spanish patterns (last 3 entries)
+  // Service type — for Spanish companies, only test the Spanish patterns (last 5 entries)
   // to avoid false matches on Swedish/English patterns (e.g. /el\b/ matching "El cliente")
   const patterns =
-    options.language === "es" ? SERVICE_TYPE_MAP.slice(-3) : SERVICE_TYPE_MAP;
+    options.language === "es" ? SERVICE_TYPE_MAP.slice(-5) : SERVICE_TYPE_MAP;
   let service_type: string | null = null;
   for (const [pattern, label] of patterns) {
     if (pattern.test(transcript)) {

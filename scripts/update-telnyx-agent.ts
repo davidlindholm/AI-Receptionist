@@ -97,7 +97,10 @@ function buildPayload(company: Company, instructions: string): Record<string, un
     instructions,
     greeting: buildGreeting(company),
     webhook_url: `${WEBHOOK_BASE_URL}/api/webhooks/telnyx?slug=${company.slug}`,
-    telephony_settings: { user_idle_timeout_secs: 30 },
+    telephony_settings: {
+      user_idle_timeout_secs: 30,
+      supports_unauthenticated_web_calls: true,
+    },
     tools: [
       {
         type: "hangup",

@@ -13,7 +13,8 @@ const nextConfig = {
   },
   async rewrites() {
     return [
-      { source: "/", destination: "/gns/index.html" },
+      { source: "/",                    destination: "/gns/index.html" },
+      { source: "/ai-voice-assistant",  destination: "/ai-voice-assistant/index.html" },
     ];
   },
 };

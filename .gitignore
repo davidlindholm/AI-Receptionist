@@ -1,39 +1,23 @@
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
+# macOS
 .DS_Store
 *.pem
 *.claude
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
 # local env files
 .env
 .env*.local
 
-# vercel
-.vercel
+# AWS
+lambda_deploy.zip
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# Python
+__pycache__/
+*.py[cod]
 
-# prisma
-prisma/dev.db
-prisma/dev.db-journal
+# voice-assistant-OLD (old Next.js app — keep source, ignore build artifacts)
+voice-assistant-OLD/node_modules/
+voice-assistant-OLD/.next/
+voice-assistant-OLD/*.tsbuildinfo
+voice-assistant-OLD/next-env.d.ts
+node_modules/
+voice-assistant-OLD/node_modules/

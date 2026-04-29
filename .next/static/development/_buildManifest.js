@@ -1,0 +1,1 @@
+self.__BUILD_MANIFEST = (function(a){return {__rewrites:{afterFiles:[{has:a,source:"\u002F",destination:"\u002Fgns\u002Findex.html"},{has:a,source:"\u002Fai-voice-assistant",destination:"\u002Fai-voice-assistant\u002Findex.html"}],beforeFiles:[],fallback:[]},sortedPages:["\u002F_app"]}}(void 0));self.__BUILD_MANIFEST_CB && self.__BUILD_MANIFEST_CB()

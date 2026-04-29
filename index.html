@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Growth Network System — AI-säljassistent</title>
+  <meta name="description" content="Din AI-säljassistent som läser dina mejl, aviserar ditt team på Slack och håller varje affär på rätt spår. Gå med i väntelistan." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── RESET & BASE ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:      #0D1B2A;
+      --navy-mid:  #122236;
+      --navy-light:#1A2F45;
+      --cyan:      #00B4D8;
+      --cyan-dark: #0077A8;
+      --cyan-glow: rgba(0,180,216,0.15);
+      --ice:       #E8F8FC;
+      --white:     #FFFFFF;
+      --gray:      #8FA5B8;
+      --border:    rgba(255,255,255,0.08);
+      --radius:    12px;
+      --radius-lg: 20px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    /* ─── UTILITY ──────────────────────────────────────────────── */
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .cyan { color: var(--cyan); }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--cyan);
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 15px;
+      padding: 13px 28px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      white-space: nowrap;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-primary:hover {
+      background: #22CFEF;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(0,180,216,0.35);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--white);
+      font-weight: 600;
+      font-size: 15px;
+      padding: 13px 24px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-ghost:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      background: var(--cyan-glow);
+      border: 1px solid rgba(0,180,216,0.25);
+      border-radius: 20px;
+      padding: 4px 14px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 17px;
+      color: var(--gray);
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    /* ─── LANGUAGE TOGGLE ──────────────────────────────────────── */
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 11px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      border: none;
+      background: transparent;
+      color: var(--gray);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .lang-btn.active {
+      background: var(--cyan);
+      color: var(--navy);
+    }
+
+    /* ─── NAV ──────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(13, 27, 42, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 17px;
+      letter-spacing: -0.01em;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-icon {
+      width: 34px; height: 34px;
+      background: var(--cyan);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-logo-icon svg { width: 18px; height: 18px; fill: var(--navy); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a.btn-primary,
+    .nav-links a.btn-primary:hover { color: var(--navy); }
+
+    .nav-cta { font-size: 13px !important; padding: 9px 18px !important; }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+    }
+    @media (max-width: 480px) {
+      .nav-logo span.logo-text { display: none; }
+    }
+
+    /* ─── HERO ─────────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 68px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: 10%; left: 50%;
+      transform: translateX(-50%);
+      width: 800px; height: 500px;
+      background: radial-gradient(ellipse at center, rgba(0,180,216,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    #hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 80px 0 100px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,180,216,0.1);
+      border: 1px solid rgba(0,180,216,0.3);
+      border-radius: 40px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--cyan);
+      margin-bottom: 28px;
+    }
+
+    .hero-badge .dot {
+      width: 6px; height: 6px;
+      background: var(--cyan);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .hero-headline {
+      font-size: clamp(38px, 6vw, 72px);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+      max-width: 860px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-sub {
+      font-size: clamp(16px, 2vw, 19px);
+      color: var(--gray);
+      max-width: 600px;
+      margin: 0 auto 44px;
+      line-height: 1.7;
+    }
+
+    .hero-form {
+      display: flex;
+      gap: 12px;
+      max-width: 500px;
+      margin: 0 auto 20px;
+    }
+
+    .hero-form input[type="email"] {
+      flex: 1;
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 18px;
+      font-size: 15px;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .hero-form input[type="email"]::placeholder { color: var(--gray); }
+    .hero-form input[type="email"]:focus { border-color: var(--cyan); }
+
+    .hero-disclaimer { font-size: 12px; color: var(--gray); opacity: 0.7; }
+
+    .hero-integrations {
+      margin-top: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hero-integrations span {
+      font-size: 12px;
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    .integration-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .integration-pill .icon {
+      width: 18px; height: 18px;
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+    }
+
+    .form-success {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 24px;
+      background: rgba(0,180,216,0.1);
+      border: 1px solid rgba(0,180,216,0.3);
+      border-radius: 12px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .form-success .check { font-size: 28px; }
+    .form-success p { font-size: 15px; font-weight: 600; color: var(--cyan); }
+    .form-success small { font-size: 13px; color: var(--gray); }
+
+    /* ─── STATS ────────────────────────────────────────────────── */
+    #stats {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--navy-mid);
+      padding: 36px 0;
+    }
+
+    .stats-inner {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      text-align: center;
+    }
+
+    .stat-item { padding: 8px 0; }
+
+    .stat-number {
+      font-size: 38px;
+      font-weight: 900;
+      color: var(--cyan);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    @media (max-width: 600px) {
+      .stats-inner { grid-template-columns: 1fr; gap: 28px; }
+    }
+
+    /* ─── PROBLEM ──────────────────────────────────────────────── */
+    #problem { padding: 100px 0; }
+
+    .problem-header { text-align: center; margin-bottom: 56px; }
+
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .pain-card {
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pain-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255,80,80,0.5), transparent);
+    }
+
+    .pain-icon { font-size: 28px; margin-bottom: 14px; }
+    .pain-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+    .pain-desc { font-size: 14px; color: var(--gray); line-height: 1.6; }
+
+    .problem-transition {
+      text-align: center;
+      margin-top: 56px;
+      padding-top: 56px;
+      border-top: 1px solid var(--border);
+    }
+
+    .problem-transition p { font-size: 20px; font-weight: 700; }
+    .problem-transition p span { color: var(--cyan); }
+
+    @media (max-width: 768px) { .pain-grid { grid-template-columns: 1fr; } }
+
+    /* ─── FEATURES ─────────────────────────────────────────────── */
+    #features {
+      padding: 100px 0;
+      background: var(--navy-mid);
+    }
+
+    .features-header { text-align: center; margin-bottom: 60px; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--navy);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(0,180,216,0.4);
+      transform: translateY(-3px);
+    }
+
+    .feature-icon {
+      width: 46px; height: 46px;
+      background: var(--cyan-glow);
+      border: 1px solid rgba(0,180,216,0.2);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+
+    .feature-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .feature-desc { font-size: 14px; color: var(--gray); line-height: 1.65; }
+
+    @media (max-width: 900px) { .features-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 580px)  { .features-grid { grid-template-columns: 1fr; } }
+
+    /* ─── HOW IT WORKS ─────────────────────────────────────────── */
+    #how { padding: 100px 0; }
+
+    .how-header { text-align: center; margin-bottom: 70px; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      position: relative;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 36px;
+      left: calc(33.33% - 10px);
+      right: calc(33.33% - 10px);
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan-dark), var(--cyan), var(--cyan-dark));
+      opacity: 0.4;
+    }
+
+    .step { text-align: center; padding: 0 24px; position: relative; }
+
+    .step-num {
+      width: 72px; height: 72px;
+      background: var(--navy-mid);
+      border: 2px solid var(--cyan);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; font-weight: 900;
+      color: var(--cyan);
+      margin: 0 auto 24px;
+      position: relative; z-index: 1;
+    }
+
+    .step-title { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+    .step-desc { font-size: 14px; color: var(--gray); line-height: 1.65; }
+
+    @media (max-width: 768px) {
+      .steps { grid-template-columns: 1fr; gap: 48px; }
+      .steps::before { display: none; }
+    }
+
+    /* ─── MOCKUP ───────────────────────────────────────────────── */
+    #mockup {
+      padding: 100px 0;
+      background: var(--navy-mid);
+      overflow: hidden;
+    }
+
+    .mockup-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .mockup-copy .section-sub { margin-bottom: 32px; }
+
+    .mockup-bullets { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+
+    .mockup-bullets li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 15px; color: var(--gray); line-height: 1.55;
+    }
+
+    .mockup-bullets li::before {
+      content: '✓';
+      flex-shrink: 0;
+      width: 22px; height: 22px;
+      background: var(--cyan-glow);
+      border: 1px solid rgba(0,180,216,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+      color: var(--cyan);
+      margin-top: 1px;
+    }
+
+    /* Slack mockup */
+    .slack-window {
+      background: #1A1D21;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+    }
+
+    .slack-titlebar {
+      background: #19171D;
+      padding: 10px 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .tbar-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    .slack-sidebar { display: flex; height: 340px; }
+
+    .sidebar-left {
+      width: 60px;
+      background: #19171D;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 16px 0; gap: 14px;
+    }
+
+    .sidebar-icon {
+      width: 34px; height: 34px; border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .sidebar-icon.active {
+      background: rgba(0,180,216,0.2);
+      border: 1px solid rgba(0,180,216,0.3);
+    }
+
+    .sidebar-mid {
+      width: 180px;
+      background: #1A1D21;
+      border-right: 1px solid rgba(255,255,255,0.06);
+      padding: 16px 12px;
+    }
+
+    .channel-section-title {
+      font-size: 11px; font-weight: 600;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase; letter-spacing: 0.07em;
+      margin-bottom: 8px; padding-left: 6px;
+    }
+
+    .channel-item {
+      display: flex; align-items: center; gap: 7px;
+      padding: 5px 6px; border-radius: 5px;
+      font-size: 13px; color: rgba(255,255,255,0.5);
+    }
+
+    .channel-item.active {
+      background: rgba(0,180,216,0.15);
+      color: white; font-weight: 600;
+    }
+
+    .channel-item .unread {
+      margin-left: auto;
+      background: var(--cyan); color: var(--navy);
+      font-size: 10px; font-weight: 700;
+      border-radius: 10px; padding: 1px 6px;
+    }
+
+    .chat-area {
+      flex: 1; padding: 16px;
+      display: flex; flex-direction: column; gap: 16px;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      font-size: 14px; font-weight: 700; color: white;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex; align-items: center; gap: 7px;
+    }
+
+    .ai-message { display: flex; gap: 10px; align-items: flex-start; }
+
+    .ai-avatar {
+      width: 30px; height: 30px;
+      background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; flex-shrink: 0;
+      font-weight: 700; color: var(--navy);
+    }
+
+    .ai-bubble {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 0 8px 8px 8px;
+      padding: 10px 13px; flex: 1;
+    }
+
+    .ai-name {
+      font-size: 12px; font-weight: 700;
+      color: var(--cyan); margin-bottom: 5px;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    .ai-name .time {
+      font-weight: 400;
+      color: rgba(255,255,255,0.3);
+      font-size: 11px;
+    }
+
+    .ai-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.55;
+    }
+
+    .ai-text strong { color: white; }
+
+    .alert-row { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+
+    .alert-tag {
+      font-size: 11px; font-weight: 600;
+      padding: 3px 9px; border-radius: 4px;
+    }
+    .alert-tag.urgent  { background: rgba(239,68,68,0.15);  color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+    .alert-tag.followup{ background: rgba(251,191,36,0.1);  color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+    .alert-tag.new     { background: rgba(0,180,216,0.1);   color: var(--cyan); border: 1px solid rgba(0,180,216,0.2); }
+
+    .digest-card {
+      background: rgba(0,180,216,0.07);
+      border: 1px solid rgba(0,180,216,0.18);
+      border-radius: 6px; padding: 9px 12px; margin-top: 8px;
+    }
+
+    .digest-title {
+      font-size: 11px; font-weight: 700;
+      color: var(--cyan); margin-bottom: 5px;
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+
+    .digest-line {
+      font-size: 12px; color: rgba(255,255,255,0.65);
+      line-height: 1.7;
+      display: flex; align-items: flex-start; gap: 6px;
+    }
+
+    .digest-line::before { content: '→'; color: var(--cyan); flex-shrink: 0; }
+
+    @media (max-width: 860px) {
+      .mockup-inner { grid-template-columns: 1fr; }
+      .slack-window { max-width: 480px; }
+    }
+
+    /* ─── WAITLIST CTA ─────────────────────────────────────────── */
+    #waitlist {
+      padding: 100px 0;
+      position: relative; overflow: hidden;
+    }
+
+    #waitlist::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px; height: 400px;
+      background: radial-gradient(ellipse, rgba(0,180,216,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .waitlist-box {
+      position: relative; z-index: 1;
+      background: var(--navy-mid);
+      border: 1px solid rgba(0,180,216,0.2);
+      border-radius: var(--radius-lg);
+      padding: 64px; text-align: center;
+      max-width: 700px; margin: 0 auto;
+    }
+
+    .waitlist-box .section-title { margin-bottom: 12px; }
+    .waitlist-box .section-sub { margin: 0 auto 36px; text-align: center; }
+
+    .waitlist-perks {
+      display: flex; justify-content: center;
+      gap: 24px; flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+
+    .perk {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 13px; color: var(--gray); font-weight: 500;
+    }
+
+    .perk .dot {
+      width: 6px; height: 6px;
+      background: var(--cyan); border-radius: 50%; flex-shrink: 0;
+    }
+
+    .waitlist-form {
+      display: flex; gap: 12px;
+      max-width: 460px; margin: 0 auto 14px;
+    }
+
+    .waitlist-form input[type="email"] {
+      flex: 1;
+      background: var(--navy);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 18px;
+      font-size: 15px; color: var(--white);
+      font-family: 'Inter', sans-serif;
+      outline: none; transition: border-color 0.2s;
+    }
+    .waitlist-form input[type="email"]::placeholder { color: var(--gray); }
+    .waitlist-form input[type="email"]:focus { border-color: var(--cyan); }
+
+    .waitlist-disclaimer { font-size: 12px; color: var(--gray); opacity: 0.6; }
+
+    .waitlist-success {
+      display: none; flex-direction: column;
+      align-items: center; gap: 8px;
+      padding: 20px 28px;
+      background: rgba(0,180,216,0.08);
+      border: 1px solid rgba(0,180,216,0.25);
+      border-radius: 12px;
+      max-width: 460px; margin: 0 auto;
+    }
+    .waitlist-success .check { font-size: 32px; }
+    .waitlist-success p { font-size: 16px; font-weight: 700; color: var(--cyan); }
+    .waitlist-success small { font-size: 13px; color: var(--gray); }
+
+    @media (max-width: 600px) {
+      .waitlist-box { padding: 36px 24px; }
+      .waitlist-form { flex-direction: column; }
+      .waitlist-form button { width: 100%; justify-content: center; }
+    }
+
+    /* ─── FOOTER ───────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      background: var(--navy-mid);
+      padding: 48px 0 32px;
+    }
+
+    .footer-inner {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; gap: 40px;
+      margin-bottom: 40px; flex-wrap: wrap;
+    }
+
+    .footer-brand .nav-logo { margin-bottom: 12px; }
+
+    .footer-brand p {
+      font-size: 13px; color: var(--gray);
+      max-width: 240px; line-height: 1.6;
+    }
+
+    .footer-links-group h4 {
+      font-size: 12px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gray); margin-bottom: 14px;
+    }
+
+    .footer-links-group ul {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 9px;
+    }
+
+    .footer-links-group a {
+      font-size: 14px; color: rgba(255,255,255,0.55);
+      transition: color 0.2s;
+    }
+    .footer-links-group a:hover { color: var(--white); }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+
+    .footer-bottom p { font-size: 13px; color: var(--gray); opacity: 0.6; }
+
+    .footer-bottom-links { display: flex; gap: 20px; list-style: none; }
+
+    .footer-bottom-links a {
+      font-size: 13px; color: var(--gray); opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    .footer-bottom-links a:hover { opacity: 1; }
+
+    /* ─── ANIMATIONS ───────────────────────────────────────────── */
+    .fade-up {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .fade-up:nth-child(2) { transition-delay: 0.08s; }
+    .fade-up:nth-child(3) { transition-delay: 0.16s; }
+    .fade-up:nth-child(4) { transition-delay: 0.24s; }
+    .fade-up:nth-child(5) { transition-delay: 0.32s; }
+    .fade-up:nth-child(6) { transition-delay: 0.40s; }
+  </style>
+</head>
+
+<body>
+
+  <!-- ═══════════ NAV ═══════════ -->
+  <nav>
+    <div class="container">
+      <div class="nav-inner">
+
+        <div class="nav-logo">
+          <div class="nav-logo-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z"/>
+            </svg>
+          </div>
+          <span class="logo-text">Growth Network System</span>
+        </div>
+
+        <div class="nav-right">
+          <ul class="nav-links">
+            <li><a href="#features" data-sv="Funktioner" data-en="Features">Funktioner</a></li>
+            <li><a href="#how" data-sv="Så fungerar det" data-en="How It Works">Så fungerar det</a></li>
+            <li><a href="#mockup" data-sv="Förhandsvisning" data-en="Preview">Förhandsvisning</a></li>
+            <li>
+              <a href="#waitlist" class="btn-primary nav-cta"
+                 data-sv="Gå med i väntelistan →"
+                 data-en="Join Waitlist →">Gå med i väntelistan →</a>
+            </li>
+          </ul>
+
+          <!-- Language toggle -->
+          <div class="lang-toggle">
+            <button class="lang-btn active" id="btnSv" onclick="setLang('sv')">🇸🇪 SV</button>
+            <button class="lang-btn" id="btnEn" onclick="setLang('en')">🇬🇧 EN</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-inner">
+
+        <div class="hero-badge">
+          <span class="dot"></span>
+          <span data-sv="Nu tar vi emot tidiga anmälningar" data-en="Now accepting early access sign-ups">Nu tar vi emot tidiga anmälningar</span>
+        </div>
+
+        <h1 class="hero-headline">
+          <span data-sv="Ditt AI-säljteam" data-en="Your AI Sales Team">Ditt AI-säljteam</span><br />
+          <span class="cyan" data-sv="som aldrig sover." data-en="That Never Sleeps.">som aldrig sover.</span>
+        </h1>
+
+        <p class="hero-sub"
+           data-sv="Koppla din inkorg och Slack. Låt AI läsa, prioritera och sammanfatta varje säljmejl — och meddela dig på Slack med exakt vad du behöver göra härnäst."
+           data-en="Connect your inbox and Slack. Let AI read, prioritise, and summarise every sales email — then ping you on Slack with exactly what to do next.">
+          Koppla din inkorg och Slack. Låt AI läsa, prioritera och sammanfatta varje säljmejl — och meddela dig på Slack med exakt vad du behöver göra härnäst.
+        </p>
+
+        <div class="hero-form" id="heroFormWrap">
+          <input type="email" id="heroEmail"
+            data-sv-placeholder="Ange din jobbmail"
+            data-en-placeholder="Enter your work email"
+            placeholder="Ange din jobbmail"
+            autocomplete="email" />
+          <button class="btn-primary" onclick="submitForm('hero')"
+                  data-sv="Få tidig åtkomst →"
+                  data-en="Get Early Access →">Få tidig åtkomst →</button>
+        </div>
+
+        <div class="form-success" id="heroSuccess">
+          <span class="check">🎉</span>
+          <p data-sv="Du är med på listan!" data-en="You're on the list!">Du är med på listan!</p>
+          <small data-sv="Vi hör av oss när din tidiga åtkomst är redo." data-en="We'll be in touch when your early access is ready.">Vi hör av oss när din tidiga åtkomst är redo.</small>
+        </div>
+
+        <p class="hero-disclaimer"
+           data-sv="14 dagars gratis provperiod · Inget kreditkort krävs · Avsluta när som helst"
+           data-en="Free 14-day trial · No credit card required · Cancel anytime">
+          14 dagars gratis provperiod · Inget kreditkort krävs · Avsluta när som helst
+        </p>
+
+        <div class="hero-integrations">
+          <span data-sv="Fungerar med" data-en="Works with">Fungerar med</span>
+          <div class="integration-pill">
+            <div class="icon" style="background:#4A154B;">💬</div>
+            Slack
+          </div>
+          <div class="integration-pill">
+            <div class="icon" style="background:#EA4335;">✉️</div>
+            Gmail
+          </div>
+          <div class="integration-pill">
+            <div class="icon" style="background:#0078D4;">📧</div>
+            Outlook
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════ STATS ═══════════ -->
+  <section id="stats">
+    <div class="container">
+      <div class="stats-inner">
+        <div class="stat-item">
+          <div class="stat-number">2×</div>
+          <div class="stat-label" data-sv="Snabbare uppföljningar" data-en="Faster follow-ups">Snabbare uppföljningar</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">10 min</div>
+          <div class="stat-label" data-sv="Daglig Slack-sammanfattning" data-en="Daily Slack digest">Daglig Slack-sammanfattning</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">0</div>
+          <div class="stat-label" data-sv="Missade leads" data-en="Missed leads">Missade leads</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════ PROBLEM ═══════════ -->
+  <section id="problem">
+    <div class="container">
+      <div class="problem-header">
+        <div class="section-label" data-sv="Känns det igen?" data-en="Sound Familiar?">Känns det igen?</div>
+        <h2 class="section-title" data-sv="Affärer faller mellan stolarna" data-en="Sales is slipping through the cracks">Affärer faller mellan stolarna</h2>
+        <p class="section-sub" style="margin:0 auto;"
+           data-sv="Varje missad uppföljning är en förlorad affär. Din inkorg är ett slagfält — och ditt team förlorar tid som borde läggas på att stänga affärer."
+           data-en="Every missed follow-up is a lost deal. Your inbox is a battlefield — and your team is losing time that could be closing revenue.">
+          Varje missad uppföljning är en förlorad affär. Din inkorg är ett slagfält — och ditt team förlorar tid som borde läggas på att stänga affärer.
+        </p>
+      </div>
+
+      <div class="pain-grid">
+        <div class="pain-card fade-up">
+          <div class="pain-icon">📬</div>
+          <div class="pain-title" data-sv="Mejl staplas, leads kallnar" data-en="Emails pile up, leads go cold">Mejl staplas, leads kallnar</div>
+          <div class="pain-desc"
+               data-sv="Potentiella kunder hör av sig men begravs under nyhetsbrev, CC-kedjor och interna trådar. Tills du hinner svara — har de gått till en konkurrent."
+               data-en="High-intent prospects reach out but get buried under newsletters, CC chains, and internal threads. By the time you respond — they've gone to a competitor.">
+            Potentiella kunder hör av sig men begravs under nyhetsbrev, CC-kedjor och interna trådar. Tills du hinner svara — har de gått till en konkurrent.
+          </div>
+        </div>
+        <div class="pain-card fade-up">
+          <div class="pain-icon">🗂️</div>
+          <div class="pain-title" data-sv="Ingen koll på affärsstatus" data-en="No visibility on deal stages">Ingen koll på affärsstatus</div>
+          <div class="pain-desc"
+               data-sv="Du måste gräva igenom mejl och CRM-anteckningar bara för att svara på 'var är vi med den här kunden?' — en fråga du inte borde behöva lägga 10 minuter på."
+               data-en="You have to dig through emails and CRM notes just to answer 'where are we with this customer?' — a question you shouldn't have to spend 10 minutes on.">
+            Du måste gräva igenom mejl och CRM-anteckningar bara för att svara på "var är vi med den här kunden?" — en fråga du inte borde behöva lägga 10 minuter på.
+          </div>
+        </div>
+        <div class="pain-card fade-up">
+          <div class="pain-icon">🔔</div>
+          <div class="pain-title" data-sv="Uppföljningar glöms bort" data-en="Follow-ups fall through the gaps">Uppföljningar glöms bort</div>
+          <div class="pain-desc"
+               data-sv="En kund bad om ett återkopplingssamtal nästa tisdag. Nu är det torsdag. Den affären är förmodligen förlorad — inte för att du inte brydde dig, utan för att du glömde."
+               data-en="A prospect asked for a callback next Tuesday. It's now Thursday. That deal is probably dead — not because you didn't care, but because you forgot.">
+            En kund bad om ett återkopplingssamtal nästa tisdag. Nu är det torsdag. Den affären är förmodligen förlorad — inte för att du inte brydde dig, utan för att du glömde.
+          </div>
+        </div>
+      </div>
+
+      <div class="problem-transition">
+        <p>
+          <span data-sv="Det finns ett bättre sätt. " data-en="There's a better way. ">Det finns ett bättre sätt. </span>
+          <span class="cyan" data-sv="Möt din AI-säljassistent." data-en="Meet your AI sales assistant.">Möt din AI-säljassistent.</span>
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════ FEATURES ═══════════ -->
+  <section id="features">
+    <div class="container">
+      <div class="features-header">
+        <div class="section-label" data-sv="Funktioner" data-en="Features">Funktioner</div>
+        <h2 class="section-title"
+            data-sv="Allt ditt säljteam behöver,<br>hanterat automatiskt."
+            data-en="Everything your sales team needs,<br>handled automatically.">Allt ditt säljteam behöver,<br>hanterat automatiskt.</h2>
+        <p class="section-sub" style="margin:0 auto;"
+           data-sv="Koppla upp en gång. Din AI-assistent tar hand om resten — läser, sammanfattar, varnar och agerar åt dig."
+           data-en="Connect once. Your AI assistant takes care of the rest — reading, summarising, alerting, and acting on your behalf.">
+          Koppla upp en gång. Din AI-assistent tar hand om resten — läser, sammanfattar, varnar och agerar åt dig.
+        </p>
+      </div>
+
+      <div class="features-grid">
+
+        <div class="feature-card fade-up">
+          <div class="feature-icon">✉️</div>
+          <div class="feature-title" data-sv="Åtkomst till e-postinkorg" data-en="Email Inbox Access">Åtkomst till e-postinkorg</div>
+          <div class="feature-desc"
+               data-sv="Kopplas säkert till Gmail eller Outlook. Läser alla inkommande säljmejl så att ingenting missas — även när du är fokuserad på annat eller är ledig."
+               data-en="Securely connects to your Gmail or Outlook. Reads every inbound sales email so nothing gets missed, even when you're heads-down or off-hours.">
+            Kopplas säkert till Gmail eller Outlook. Läser alla inkommande säljmejl så att ingenting missas — även när du är fokuserad på annat eller är ledig.
+          </div>
+        </div>
+
+        <div class="feature-card fade-up">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-title" data-sv="Slack-aviseringar i realtid" data-en="Slack Alerts in Real-Time">Slack-aviseringar i realtid</div>
+          <div class="feature-desc"
+               data-sv="Du får en notis på Slack direkt när något kräver din uppmärksamhet — ett brådskande svar, en het lead eller en prospect som återhört sig efter veckors tystnad."
+               data-en="Get pinged on Slack the moment something needs your attention — an urgent reply, a hot lead, or a prospect who just re-engaged after weeks of silence.">
+            Du får en notis på Slack direkt när något kräver din uppmärksamhet — ett brådskande svar, en het lead eller en prospect som återhört sig efter veckors tystnad.
+          </div>
+        </div>
+
+        <div class="feature-card fade-up">
+          <div class="feature-icon">📋</div>
+          <div class="feature-title" data-sv="Smarta e-postsammanfattningar" data-en="Smart Email Summaries">Smarta e-postsammanfattningar</div>
+          <div class="feature-desc"
+               data-sv="Sluta vada igenom långa mejltrådar. Din AI destillerar varje konversation till en 3-menings sammanfattning med beslutet eller åtgärden tydligt utpekad."
+               data-en="No more wading through long email threads. Your AI distils every conversation into a 3-line summary with the key decision or action clearly called out.">
+            Sluta vada igenom långa mejltrådar. Din AI destillerar varje konversation till en 3-menings sammanfattning med beslutet eller åtgärden tydligt utpekad.
+          </div>
+        </div>
+
+        <div class="feature-card fade-up">
+          <div class="feature-icon">🔁</div>
+          <div class="feature-title" data-sv="Påminnelser om uppföljning" data-en="Follow-Up Reminders">Påminnelser om uppföljning</div>
+          <div class="feature-desc"
+               data-sv="AI:n håller koll på lovade återkopplingar, väntande offerter och obesvarade trådar — och påminner dig via Slack innan de bli försenade."
+               data-en="The AI tracks promised callbacks, pending proposals, and unanswered threads — then reminds you via Slack before they become overdue.">
+            AI:n håller koll på lovade återkopplingar, väntande offerter och obesvarade trådar — och påminner dig via Slack innan de blir försenade.
+          </div>
+        </div>
+
+        <div class="feature-card fade-up">
+          <div class="feature-icon">💬</div>
+          <div class="feature-title" data-sv="Fråga vad som helst" data-en="Ask It Anything">Fråga vad som helst</div>
+          <div class="feature-desc"
+               data-sv='"Var är vi med Acme AB?" "Vad behöver jag göra idag?" "Vem har inte svarat på en vecka?" Ställ frågan på svenska, få svar direkt.'
+               data-en='"What stage is Acme Corp?" "What do I need to do today?" "Who hasn\'t replied in a week?" Ask in plain English, get an instant answer.'>
+            "Var är vi med Acme AB?" "Vad behöver jag göra idag?" "Vem har inte svarat på en vecka?" Ställ frågan på svenska, få svar direkt.
+          </div>
+        </div>
+
+        <div class="feature-card fade-up">
+          <div class="feature-icon">📊</div>
+          <div class="feature-title" data-sv="Daglig säljöversikt" data-en="Daily Sales Digest">Daglig säljöversikt</div>
+          <div class="feature-desc"
+               data-sv="Varje morgon kl. 08:00 får du ett Slack-meddelande med dina 5 viktigaste prioriteringar, affärer som riskerar att falla och vem du bör ringa idag."
+               data-en="Every morning at 8am, get a Slack message with your top 5 priorities, deals at risk, and who to call today. Start every day with clarity.">
+            Varje morgon kl. 08:00 får du ett Slack-meddelande med dina 5 viktigaste prioriteringar, affärer som riskerar att falla och vem du bör ringa idag.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════ HOW IT WORKS ═══════════ -->
+  <section id="how">
+    <div class="container">
+      <div class="how-header">
+        <div class="section-label" data-sv="Så fungerar det" data-en="How It Works">Så fungerar det</div>
+        <h2 class="section-title" data-sv="Igång på under 5 minuter." data-en="Up and running in under 5 minutes.">Igång på under 5 minuter.</h2>
+        <p class="section-sub" style="margin:0 auto;"
+           data-sv="Inga tekniker behövs. Ingen komplicerad installation. Koppla upp, konfigurera och låt AI:n börja jobba."
+           data-en="No engineers needed. No complex setup. Just connect, configure, and let the AI get to work.">
+          Inga tekniker behövs. Ingen komplicerad installation. Koppla upp, konfigurera och låt AI:n börja jobba.
+        </p>
+      </div>
+
+      <div class="steps">
+        <div class="step fade-up">
+          <div class="step-num">1</div>
+          <div class="step-title" data-sv="Koppla dina verktyg" data-en="Connect Your Tools">Koppla dina verktyg</div>
+          <div class="step-desc"
+               data-sv="Länka din e-postinkorg (Gmail eller Outlook) och ditt Slack-workspace. Tar ungefär 2 minuter med OAuth — inga API-nycklar, inget IT-ärende."
+               data-en="Link your email inbox (Gmail or Outlook) and your Slack workspace. Takes about 2 minutes with OAuth — no API keys, no IT ticket.">
+            Länka din e-postinkorg (Gmail eller Outlook) och ditt Slack-workspace. Tar ungefär 2 minuter med OAuth — inga API-nycklar, inget IT-ärende.
+          </div>
+        </div>
+        <div class="step fade-up">
+          <div class="step-num">2</div>
+          <div class="step-title" data-sv="AI läser och prioriterar" data-en="AI Reads &amp; Prioritises">AI läser och prioriterar</div>
+          <div class="step-desc"
+               data-sv="Din AI-assistent övervakar din inkorg kontinuerligt. Den läser, kategoriserar och lyfter fram mejlen och konversationerna som faktiskt spelar roll för din pipeline."
+               data-en="Your AI assistant monitors your inbox continuously. It reads, categorises, and surfaces the emails and conversations that actually matter to your pipeline.">
+            Din AI-assistent övervakar din inkorg kontinuerligt. Den läser, kategoriserar och lyfter fram mejlen och konversationerna som faktiskt spelar roll för din pipeline.
+          </div>
+        </div>
+        <div class="step fade-up">
+          <div class="step-num">3</div>
+          <div class="step-title" data-sv="Du agerar — eller AI:n gör det" data-en="You Act — Or It Does">Du agerar — eller AI:n gör det</div>
+          <div class="step-desc"
+               data-sv="Få en Slack-notis med sammanfattning och föreslagen åtgärd. Svara från Slack, ställ en följdfråga, eller låt AI:n sköta rutinuppgifter automatiskt."
+               data-en="Get a Slack notification with a summary and suggested action. Reply from Slack, ask a follow-up question, or let the AI handle routine tasks automatically.">
+            Få en Slack-notis med sammanfattning och föreslagen åtgärd. Svara från Slack, ställ en följdfråga, eller låt AI:n sköta rutinuppgifter automatiskt.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════ MOCKUP ═══════════ -->
+  <section id="mockup">
+    <div class="container">
+      <div class="mockup-inner">
+
+        <div class="mockup-copy fade-up">
+          <div class="section-label" data-sv="Se det i praktiken" data-en="See It In Action">Se det i praktiken</div>
+          <h2 class="section-title"
+              data-sv="Din morgonöversikt, levererad till Slack."
+              data-en="Your morning briefing, delivered to Slack.">Din morgonöversikt, levererad till Slack.</h2>
+          <p class="section-sub"
+             data-sv="Varje dag börjar med en tydlig bild av vad som är akut, vad som är förfallet och vem som behöver ett svar — direkt i kanalen du redan använder."
+             data-en="Every day starts with a clear picture of what's hot, what's due, and what needs a reply — right in the channel you already live in.">
+            Varje dag börjar med en tydlig bild av vad som är akut, vad som är förfallet och vem som behöver ett svar — direkt i kanalen du redan använder.
+          </p>
+          <ul class="mockup-bullets">
+            <li data-sv="Brådskande mejl flaggas och sammanfattas omedelbart" data-en="Urgent emails flagged and summarised instantly">Brådskande mejl flaggas och sammanfattas omedelbart</li>
+            <li data-sv="Påminnelser om uppföljning innan deadlines passeras" data-en="Follow-up reminders before deadlines hit">Påminnelser om uppföljning innan deadlines passeras</li>
+            <li data-sv="Affärsstatus utan att öppna ditt CRM" data-en="Deal stage updates without opening your CRM">Affärsstatus utan att öppna ditt CRM</li>
+            <li data-sv="Svara med ett klick eller delegera till AI:n" data-en="One-click reply or delegate to AI">Svara med ett klick eller delegera till AI:n</li>
+          </ul>
+        </div>
+
+        <!-- Slack mockup -->
+        <div class="fade-up">
+          <div class="slack-window">
+            <div class="slack-titlebar">
+              <div class="tbar-dot" style="background:#FF5F57;"></div>
+              <div class="tbar-dot" style="background:#FEBC2E;"></div>
+              <div class="tbar-dot" style="background:#28C840;"></div>
+            </div>
+            <div class="slack-sidebar">
+              <div class="sidebar-left">
+                <div class="sidebar-icon active">🏠</div>
+                <div class="sidebar-icon">💬</div>
+                <div class="sidebar-icon">🔔</div>
+                <div class="sidebar-icon">✉️</div>
+              </div>
+              <div class="sidebar-mid">
+                <div class="channel-section-title">Kanaler</div>
+                <div class="channel-item"># allmänt</div>
+                <div class="channel-item"># säljteam</div>
+                <div class="channel-item active">
+                  🤖 ai-assistent
+                  <span class="unread">3</span>
+                </div>
+                <div class="channel-item"># stängda-affärer</div>
+                <br/>
+                <div class="channel-section-title">DM</div>
+                <div class="channel-item">👤 Anna</div>
+                <div class="channel-item">👤 Marcus</div>
+              </div>
+              <div class="chat-area">
+                <div class="chat-header">🤖 ai-assistent</div>
+                <div class="ai-message">
+                  <div class="ai-avatar">AI</div>
+                  <div class="ai-bubble">
+                    <div class="ai-name">
+                      Säljassistenten <span class="time">08:01</span>
+                    </div>
+                    <div class="ai-text">
+                      God morgon! Här är din <strong>dagliga säljöversikt</strong> för idag:
+                      <div class="digest-card">
+                        <div class="digest-title">📋 Dagens prioriteringar</div>
+                        <div class="digest-line">Acme AB — väntar på svar på offert (4 dagar)</div>
+                        <div class="digest-line">TechStart AB — uppföljningssamtal utlovat idag</div>
+                        <div class="digest-line">3 nya inkommande leads väntar på kvalificering</div>
+                      </div>
+                    </div>
+                    <div class="alert-row">
+                      <span class="alert-tag urgent">🔴 1 Brådskande</span>
+                      <span class="alert-tag followup">🟡 2 Uppföljningar</span>
+                      <span class="alert-tag new">🔵 3 Nya leads</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════ WAITLIST ═══════════ -->
+  <section id="waitlist">
+    <div class="container">
+      <div class="waitlist-box">
+
+        <div class="section-label" data-sv="Tidig åtkomst" data-en="Early Access">Tidig åtkomst</div>
+        <h2 class="section-title" data-sv="Bli först i kön." data-en="Be first in line.">Bli först i kön.</h2>
+        <p class="section-sub"
+           data-sv="Gå med i väntelistan idag och få gratis prioriterad åtkomst, personlig onboarding och ett grundarrabatt när vi lanserar."
+           data-en="Join the waitlist today and get free priority access, onboarding support, and a founding-member discount when we launch.">
+          Gå med i väntelistan idag och få gratis prioriterad åtkomst, personlig onboarding och ett grundarrabatt när vi lanserar.
+        </p>
+
+        <div class="waitlist-perks">
+          <div class="perk"><span class="dot"></span><span data-sv="14 dagars gratis provperiod" data-en="Free 14-day trial">14 dagars gratis provperiod</span></div>
+          <div class="perk"><span class="dot"></span><span data-sv="Inget kreditkort krävs" data-en="No credit card needed">Inget kreditkort krävs</span></div>
+          <div class="perk"><span class="dot"></span><span data-sv="Prioriterad onboarding" data-en="Priority onboarding">Prioriterad onboarding</span></div>
+          <div class="perk"><span class="dot"></span><span data-sv="Grundarrabatt" data-en="Founding member pricing">Grundarrabatt</span></div>
+        </div>
+
+        <div class="waitlist-form" id="waitlistFormWrap">
+          <input type="email" id="waitlistEmail"
+            data-sv-placeholder="Ange din jobbmail"
+            data-en-placeholder="Enter your work email"
+            placeholder="Ange din jobbmail"
+            autocomplete="email" />
+          <button class="btn-primary" onclick="submitForm('waitlist')"
+                  data-sv="Gå med i väntelistan →"
+                  data-en="Join Waitlist →">Gå med i väntelistan →</button>
+        </div>
+
+        <div class="waitlist-success" id="waitlistSuccess">
+          <span class="check">🎉</span>
+          <p data-sv="Du är med på listan!" data-en="You're on the list!">Du är med på listan!</p>
+          <small data-sv="Vi hör av oss med din tidiga åtkomst inom kort." data-en="We'll reach out with your early access details soon.">Vi hör av oss med din tidiga åtkomst inom kort.</small>
+        </div>
+
+        <p class="waitlist-disclaimer" id="waitlistDisclaimer"
+           data-sv="Ingen spam. Avregistrera dig när som helst. Vi respekterar din inkorg."
+           data-en="No spam. Unsubscribe anytime. We respect your inbox.">
+          Ingen spam. Avregistrera dig när som helst. Vi respekterar din inkorg.
+        </p>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+
+        <div class="footer-brand">
+          <div class="nav-logo">
+            <div class="nav-logo-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z"/>
+              </svg>
+            </div>
+            Growth Network System
+          </div>
+          <p data-sv="AI-driven säljautomatisering för team som vill stänga fler affärer med mindre ansträngning."
+             data-en="AI-powered sales automation for teams that want to close more deals with less effort.">
+            AI-driven säljautomatisering för team som vill stänga fler affärer med mindre ansträngning.
+          </p>
+        </div>
+
+        <div class="footer-links-group">
+          <h4 data-sv="Produkt" data-en="Product">Produkt</h4>
+          <ul>
+            <li><a href="#features" data-sv="Funktioner" data-en="Features">Funktioner</a></li>
+            <li><a href="#how" data-sv="Så fungerar det" data-en="How It Works">Så fungerar det</a></li>
+            <li><a href="#waitlist" data-sv="Tidig åtkomst" data-en="Early Access">Tidig åtkomst</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links-group">
+          <h4 data-sv="Företag" data-en="Company">Företag</h4>
+          <ul>
+            <li><a href="#" data-sv="Om oss" data-en="About">Om oss</a></li>
+            <li><a href="#" data-sv="Blogg" data-en="Blog">Blogg</a></li>
+            <li><a href="mailto:hello@growthnetworksystem.com" data-sv="Kontakt" data-en="Contact">Kontakt</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links-group">
+          <h4 data-sv="Juridik" data-en="Legal">Juridik</h4>
+          <ul>
+            <li><a href="#" data-sv="Integritetspolicy" data-en="Privacy Policy">Integritetspolicy</a></li>
+            <li><a href="#" data-sv="Användarvillkor" data-en="Terms of Service">Användarvillkor</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Growth Network System. <span data-sv="Alla rättigheter förbehållna." data-en="All rights reserved.">Alla rättigheter förbehållna.</span></p>
+        <ul class="footer-bottom-links">
+          <li><a href="#" data-sv="Integritet" data-en="Privacy">Integritet</a></li>
+          <li><a href="#" data-sv="Villkor" data-en="Terms">Villkor</a></li>
+          <li><a href="mailto:hello@growthnetworksystem.com" data-sv="Kontakt" data-en="Contact">Kontakt</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ═══════════ SCRIPTS ═══════════ -->
+  <script>
+    /* ── Language toggle ──────────────────────────────────────── */
+    let currentLang = 'sv';
+
+    function setLang(lang) {
+      currentLang = lang;
+
+      // Toggle button states
+      document.getElementById('btnSv').classList.toggle('active', lang === 'sv');
+      document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+
+      // Update <html> lang attribute
+      document.documentElement.lang = lang;
+
+      // Swap all [data-sv] / [data-en] text content
+      document.querySelectorAll('[data-sv]').forEach(el => {
+        const text = el.getAttribute('data-' + lang);
+        if (text) {
+          // Handle innerHTML for elements that may contain <br>
+          if (text.includes('<br>') || text.includes('<strong>')) {
+            el.innerHTML = text;
+          } else {
+            el.textContent = text;
+          }
+        }
+      });
+
+      // Swap placeholder attributes
+      document.querySelectorAll('[data-sv-placeholder]').forEach(el => {
+        const ph = el.getAttribute('data-' + lang + '-placeholder');
+        if (ph) el.placeholder = ph;
+      });
+
+      // Update page title & meta
+      if (lang === 'sv') {
+        document.title = 'Growth Network System — AI-säljassistent';
+      } else {
+        document.title = 'Growth Network System — AI Sales Assistant';
+      }
+    }
+
+    /* ── Waitlist form handler ─────────────────────────────────── */
+    function submitForm(context) {
+      const emailEl    = document.getElementById(context === 'hero' ? 'heroEmail' : 'waitlistEmail');
+      const formWrap   = document.getElementById(context === 'hero' ? 'heroFormWrap' : 'waitlistFormWrap');
+      const successEl  = document.getElementById(context === 'hero' ? 'heroSuccess' : 'waitlistSuccess');
+      const disclaimer = document.getElementById('waitlistDisclaimer');
+
+      const email = emailEl.value.trim();
+
+      if (!email || !email.includes('@')) {
+        emailEl.style.borderColor = '#f87171';
+        emailEl.focus();
+        setTimeout(() => { emailEl.style.borderColor = ''; }, 1500);
+        return;
+      }
+
+      formWrap.style.display = 'none';
+      successEl.style.display = 'flex';
+      if (disclaimer) disclaimer.style.display = 'none';
+
+      // ── AWS API Gateway + Lambda (us-west-2 Oregon)
+      // Replace YOUR_API_ID with your actual API Gateway ID after deploying
+      fetch('https://dhb9s1not4.execute-api.us-west-2.amazonaws.com/prod/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, lang: currentLang })
+      }).catch(err => console.error('Signup error:', err));
+
+      console.log('Waitlist signup:', email, '| lang:', currentLang);
+    }
+
+    /* ── Scroll-triggered fade-in ──────────────────────────────── */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    /* ── Active nav link on scroll ─────────────────────────────── */
+    const sections  = document.querySelectorAll('section[id]');
+    const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 120) current = s.id;
+      });
+      navAnchors.forEach(a => {
+        a.style.color = a.getAttribute('href') === '#' + current ? 'var(--white)' : '';
+      });
+    });
+
+    /* ── Enter key on email inputs ─────────────────────────────── */
+    document.getElementById('heroEmail').addEventListener('keydown', e => {
+      if (e.key === 'Enter') submitForm('hero');
+    });
+    document.getElementById('waitlistEmail').addEventListener('keydown', e => {
+      if (e.key === 'Enter') submitForm('waitlist');
+    });
+  </script>
+
+</body>
+</html>

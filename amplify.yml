@@ -1,12 +1,19 @@
 version: 1
 frontend:
   phases:
+    preBuild:
+      commands:
+        - nvm install 20.19.0
+        - nvm use 20.19.0
+        - npm install
     build:
       commands:
-        - echo "Static site — no build step needed"
+        - npm run build
   artifacts:
-    baseDirectory: /
+    baseDirectory: .next
     files:
-      - index.html
+      - '**/*'
   cache:
-    paths: []
+    paths:
+      - node_modules/**/*
+      - .next/cache/**/*

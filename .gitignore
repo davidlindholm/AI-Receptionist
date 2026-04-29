@@ -3,6 +3,17 @@
 *.pem
 *.claude
 
+# Root static file (served via public/gns/index.html)
+/index.html
+
+# Next.js
+/.next/
+/out/
+/build
+node_modules/
+*.tsbuildinfo
+next-env.d.ts
+
 # local env files
 .env
 .env*.local

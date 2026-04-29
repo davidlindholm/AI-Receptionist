@@ -890,6 +890,81 @@
     .fade-up:nth-child(4) { transition-delay: 0.24s; }
     .fade-up:nth-child(5) { transition-delay: 0.32s; }
     .fade-up:nth-child(6) { transition-delay: 0.40s; }
+
+    /* ─── MOBILE ───────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+
+      /* Container */
+      .container { padding: 0 16px; }
+
+      /* Section spacing */
+      #problem, #features, #how, #mockup, #waitlist { padding: 64px 0; }
+
+      /* Nav */
+      .nav-inner { height: 60px; }
+      .nav-logo { font-size: 14px; }
+      .nav-logo-icon { width: 30px; height: 30px; }
+      .nav-logo-icon svg { width: 15px; height: 15px; }
+      .lang-btn { padding: 4px 8px; font-size: 11px; }
+
+      /* Hero */
+      #hero { padding-top: 60px; }
+      .hero-inner { padding: 48px 0 64px; }
+      .hero-badge { font-size: 11px; padding: 5px 12px; margin-bottom: 20px; }
+      .hero-headline { font-size: clamp(32px, 9vw, 52px); margin-bottom: 16px; }
+      .hero-sub { font-size: 15px; margin-bottom: 32px; }
+      .hero-form {
+        flex-direction: column;
+        gap: 10px;
+        padding: 0 4px;
+      }
+      .hero-form input[type="email"] { text-align: center; }
+      .hero-form button { width: 100%; justify-content: center; }
+      .hero-disclaimer { font-size: 11px; padding: 0 8px; }
+      .hero-integrations { margin-top: 40px; gap: 8px; }
+
+      /* Stats */
+      #stats { padding: 28px 0; }
+      .stats-inner { grid-template-columns: repeat(3,1fr); gap: 8px; }
+      .stat-number { font-size: 26px; }
+      .stat-label { font-size: 11px; }
+
+      /* Problem */
+      .problem-header { margin-bottom: 36px; }
+      .problem-transition { margin-top: 40px; padding-top: 40px; }
+      .problem-transition p { font-size: 17px; }
+
+      /* Section headings */
+      .section-title { font-size: clamp(24px, 6vw, 34px); }
+      .section-sub { font-size: 15px; }
+      .features-header, .how-header { margin-bottom: 40px; }
+
+      /* Mockup — hide sidebar on small screens */
+      .sidebar-mid { display: none; }
+      .slack-sidebar { height: auto; min-height: 280px; }
+      .sidebar-left { width: 48px; }
+
+      /* Waitlist box */
+      .waitlist-box { padding: 36px 20px; border-radius: 16px; }
+      .waitlist-perks { gap: 12px; }
+      .perk { font-size: 12px; }
+
+      /* Footer */
+      .footer-inner { flex-direction: column; gap: 32px; }
+      .footer-brand p { max-width: 100%; }
+      .footer-links-group { width: 100%; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
+      footer { padding: 40px 0 24px; }
+    }
+
+    /* Very small phones */
+    @media (max-width: 380px) {
+      .stats-inner { grid-template-columns: 1fr; gap: 20px; }
+      .stat-number { font-size: 32px; }
+      .stat-label { font-size: 13px; }
+      .hero-headline { font-size: 30px; }
+      .lang-btn { padding: 3px 6px; }
+    }
   </style>
 </head>
 
